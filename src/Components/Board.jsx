@@ -2,6 +2,7 @@ import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import theme from '../Style/Theme';
 import { AddCircleOutline } from '@styled-icons/material';
+import Cell from './Cell';
 
 const BackBoard = styled.div`
   width: 100%;
@@ -19,7 +20,6 @@ const LeftBox = styled.div`
    flex-basis: 28%;
    margin-right: 2%;
 `
-
 const AddMessage = styled.div`
   position: absolute;
   top: 50%;
@@ -42,14 +42,18 @@ const AddButton = styled(AddCircleOutline)`
   }
 `
 
-const Board = ({ children, onToggleModal }) => {
+const Board = ({ children, visible, onToggleModal }) => {
    return (
       <>
          <BackBoard>
-            <AddMessage>                  
-               <AddButton onClick={onToggleModal}/>
-               There are no challenge yet.<br /> Click + button to add your first challenge.
-            </AddMessage>
+            {!visible && 
+               <div className="add-challenge">
+                  <AddMessage>                  
+                  <AddButton onClick={onToggleModal}/>
+                  There are no challenge yet.<br /> Click + button to add your first challenge.
+                  </AddMessage>
+               </div>
+            }
             <LeftBox>
                {children}
             </LeftBox>
