@@ -67,7 +67,7 @@ const getAfter30days = (date) => {
    return convertDateString(inputDate);
 }
 
-const Form = ({ onToggleModal }) => {
+const Form = ({ onToggleModal, onInsertChallenge, onEditChallenge }) => {
    const [goal, setGoal] = useState('');
    const [message, setMessage] = useState('');
    const [motivate, setMotivate] = useState('');
@@ -94,6 +94,7 @@ const Form = ({ onToggleModal }) => {
          setMessage('목표를 입력해주세요');
          inputRef.current.focus();
       } else {
+         onInsertChallenge(goal, date, endDay, motivate);
          onToggleModal();
       }
    }
@@ -128,10 +129,11 @@ const Form = ({ onToggleModal }) => {
                   name="motivate" 
                   placeholder="The truth is that everyone is bored, and devotes himself to cultivating habits."
                   value={motivate}
+                  maxLength="100"
                   onChange={onChangeMotivate}
                ></textarea>
             </FormBlock>
-            <Button title="START"/>
+            <Button title="START" type="subimt"/>
          </form>
       </>
    )

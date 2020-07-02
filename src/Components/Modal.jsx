@@ -38,7 +38,7 @@ const CloseButton = styled(Close)`
 `
 
 
-const Modal = ({ title, onToggleModal }) => {
+const Modal = ({ children, title, onToggleModal }) => {
 
     return (
         <>
@@ -46,7 +46,7 @@ const Modal = ({ title, onToggleModal }) => {
                 <CloseButton onClick={onToggleModal} />
                 <ModalBlock>
                     <h2>{title}</h2>
-                    <Form onToggleModal={onToggleModal}/>
+                    {children}
                 </ModalBlock>
         </>
     )
