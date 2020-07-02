@@ -108,6 +108,7 @@ const Form = ({ onToggleModal }) => {
                   onChange={onChangeGoal}
                   name="goal" 
                   placeholder="Study React"
+                  ref={inputRef}
                />
             </FormBlock>
             <FormBlock>
