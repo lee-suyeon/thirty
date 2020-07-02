@@ -3,11 +3,9 @@ import GlobalStyle from './Style/globalStyles';
 import Template from './Components/Template';
 import Modal from './Components/Modal';
 import Board from './Components/Board';
+import Note from './Components/Note';
+import DashBoard from './Components/DashBoard';
 import styled, { ThemeProvider } from 'styled-components';
-
-// import Button from './Components/Button';
-
-
 
 
 const App = () => {
@@ -38,7 +36,10 @@ const App = () => {
       <>
         <GlobalStyle />
           <Template>
-            <Board onToggleModal={onToggleModal}></Board>
+            <Board onToggleModal={onToggleModal}>
+              <Note />
+              <DashBoard />
+            </Board>
           </Template>
           {modal && 
             <Modal 
