@@ -34,12 +34,12 @@ const AddButton = styled(AddCircleOutline)`
   }
 `
 
-const Board = ({ children }) => {
+const Board = ({ children, onToggleModal }) => {
    return (
       <>
          <BackBoard>
             <AddMessage>                  
-               <AddButton/>
+               <AddButton onClick={onToggleModal}/>
                There are no challenge yet.<br /> Click + button to add your first challenge.
             </AddMessage>
          </BackBoard>
