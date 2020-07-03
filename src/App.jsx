@@ -6,14 +6,21 @@ import Board from './Components/Board';
 import Note from './Components/Note';
 import DashBoard from './Components/DashBoard';
 import Form from './Components/Form';
+import CellTable from './Components/CellTable';
 import styled, { ThemeProvider } from 'styled-components';
 
+
+const addNumbers = () => {
+  const dayNumber = Array(30).fill().map((v, i) => i + 1);
+  return dayNumber;
+}
 
 const App = () => {
   // const [value, setValue] = useState('');
   const [modal, setModal] = useState(false);
   const [initial, setInitial] = useState(false);
   const [update, setUpdate] = useState(false);
+  const [dayNumbers, setDayNumbers] = useState(addNumbers());
   const [challenge, setChallenge] = useState({
     goal: '',
     startDate: '',
@@ -64,14 +71,16 @@ const App = () => {
             <Board visible={initial} onToggleModal={onToggleModal}>
               {initial &&
                 <>
-                  <Note 
+                  {/* <Note 
+                    
+                    /> */}
+                  <DashBoard
                     challenge={challenge}
                     onEditChallenge={onEditChallenge}
-                    />
-                  <DashBoard />
+                  />
+                  <CellTable dayNumbers={dayNumbers}/>
                 </>
                 }
-              
             </Board>
           </Template>
           {modal && 
