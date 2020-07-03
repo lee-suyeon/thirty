@@ -7,6 +7,7 @@ import Cell from './Cell';
 const BackBoard = styled.div`
   width: 100%;
   display: flex;
+  justify-content: space-between;
   height: 68vh;
   position: relative;
   background-color: #ffffff;
@@ -54,9 +55,7 @@ const Board = ({ children, visible, onToggleModal }) => {
                   </AddMessage>
                </div>
             }
-            <LeftBox>
                {children}
-            </LeftBox>
          </BackBoard>
       </>
    )

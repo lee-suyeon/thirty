@@ -7,7 +7,7 @@ import { Close } from '@styled-icons/material/Close';
 
 const Content = styled.div`
     width: 100%;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
     h2{
         color : #666;
         font-size: 1.2rem;
@@ -45,7 +45,6 @@ const EditButton = styled(Edit)`
 `
 
 const Note = ({ challenge, onEditChallenge }) => {
-    console.log(challenge)
     return (
         <>
             <EditButton onClick={onEditChallenge}/>
