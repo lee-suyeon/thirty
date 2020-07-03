@@ -10,36 +10,28 @@ import CellTable from './Components/CellTable';
 import styled, { ThemeProvider } from 'styled-components';
 
 
-const addNumbers = () => {
-  const dayNumber = Array(30).fill().map((v, i) => i + 1);
-  return dayNumber;
-}
+
+    // function go() {
+    //     var now = new Date();
+    //     var then = new Date('2017-09-10T10:00:00');
+    //     var gap = now.getTime() - then.getTime();
+    //     gap = Math.floor(gap / (1000 * 60 * 60 * 24)) * -1;
+    //     document.write('<div id="dday">D-<span style="font-size:33px;">' + gap + '</span></div>');
+    // }
+
 
 const App = () => {
   // const [value, setValue] = useState('');
   const [modal, setModal] = useState(false);
   const [initial, setInitial] = useState(false);
   const [update, setUpdate] = useState(false);
-  const [dayNumbers, setDayNumbers] = useState(addNumbers());
+  const [count, setCount] = useState('00');
   const [challenge, setChallenge] = useState({
     goal: '',
     startDate: '',
     endDate: '',
     motivate: ''
   });
-
-
-  // const onChangeGoal = (e) => {
-  //     setGoal(e.target.value);
-  // }
-
-  // const handleCreate = (data) => {
-  //   console.log(data);
-  // }
-
-  // const onToggleModal = () => {
-  //   setModal((prev) => !prev)
-  // }
 
   const onInsertChallenge = (goal, startDate, endDate, motivate) => {
     const first = {
@@ -62,7 +54,6 @@ const App = () => {
     setModal( prev => !prev );
   }
 
-  console.log(initial);
 
     return (
       <>
@@ -71,14 +62,13 @@ const App = () => {
             <Board visible={initial} onToggleModal={onToggleModal}>
               {initial &&
                 <>
-                  {/* <Note 
-                    
-                    /> */}
                   <DashBoard
                     challenge={challenge}
                     onEditChallenge={onEditChallenge}
+                    count={count}
                   />
-                  <CellTable dayNumbers={dayNumbers}/>
+                  <CellTable
+                    />
                 </>
                 }
             </Board>

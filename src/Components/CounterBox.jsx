@@ -43,7 +43,7 @@ const DayCounter = styled.div`
     }
 `
 
-const CounterBox = () => {
+const CounterBox = ({ count }) => {
     const [today, setToday] = useState(getToday());
 
     return (
@@ -51,7 +51,7 @@ const CounterBox = () => {
             <CurrentBox>
                 <h2>Current Count</h2>
                 <DayCounter>
-                    <em className="current-count">03</em>
+                    <em className="current-count">{count}</em>
                     <strong className="total-count">30</strong>
                 </DayCounter>
             </CurrentBox>
