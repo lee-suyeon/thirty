@@ -13,15 +13,15 @@ const LeftBox = styled.div`
     justify-content: space-between;
 `
 
-const DashBoard = ({ challenge, onEditChallenge}) => {
+const DashBoard = ({ challenge, onEditForm, count }) => {
     return (
         <>
             <LeftBox>
                 <Note 
                     challenge={challenge}
-                    onEditChallenge={onEditChallenge}
+                    onEditForm={onEditForm}
                     />
-                <CounterBox />
+                <CounterBox count={count}/>
             </LeftBox>
         </>
    )

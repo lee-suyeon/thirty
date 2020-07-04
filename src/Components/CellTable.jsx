@@ -7,12 +7,11 @@ const RightBox = styled.div`
 `
 const dayNumbers = Array(30).fill().map((v, i) => i + 1);
 
-const CellTable = ({ done }) => {
+const CellTable = ({ onCountCell }) => {
     
-
     return (
         <RightBox>
-            {dayNumbers.map((v, i) => <Cell key={`${i}days`} days={v} done={done}/>)}
+            {dayNumbers.map((v, i) => <Cell key={`${i}days`} days={v} onCountCell={onCountCell}/>)}
         </RightBox>
     )
 }

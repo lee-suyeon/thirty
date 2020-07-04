@@ -1,14 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
-
-const getToday = () => {
-    let today = new Date();
-    let options = { weekday: 'long'};
-    let day = new Intl.DateTimeFormat('en-US', options).format(today);
-    return day;
-}
-
 const CurrentBox = styled.div`
     position: relative;
     width: 100%;
@@ -44,14 +36,13 @@ const DayCounter = styled.div`
 `
 
 const CounterBox = ({ count }) => {
-    const [today, setToday] = useState(getToday());
 
     return (
         <>
             <CurrentBox>
                 <h2>Current Count</h2>
                 <DayCounter>
-                    <em className="current-count">{count}</em>
+                    <em className="current-count">{count < 10 ? `0${count}` : count}</em>
                     <strong className="total-count">30</strong>
                 </DayCounter>
             </CurrentBox>

@@ -10,8 +10,6 @@ const colorStyles = css`
     `}
 `;
 
-
-
 const Circle = styled.div`
     display: inline-block;
     position: relative;
@@ -34,15 +32,14 @@ const Circle = styled.div`
     ${colorStyles}
 `
 
-
-
-
-const Cell = memo(({ days, onClickCell }) => {
+const Cell = memo(({ days, onCountCell }) => {
     const [done, setDone] = useState(false);
 
     const onClickCircle = () => {
-        console.log("days", days);
-        setDone(prev => !prev);
+        setDone(prev => !prev)
+        onCountCell(done);
+        console.log("done", done);
+
       };
 
     return (
