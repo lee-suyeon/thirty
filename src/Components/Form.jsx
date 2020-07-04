@@ -67,12 +67,26 @@ const getAfter30days = (date) => {
    return convertDateString(inputDate);
 }
 
-const Form = ({ onToggleModal, onInsertChallenge, onEditChallenge }) => {
-   const [goal, setGoal] = useState('');
+const getDday = (date) => {
+   const startDay = new Date(date);
+   const endDay = new Date(getAfter30days(getToday()));
+
+   const gap = startDay.getTime() - endDay.getTime();
+   const dDay = Math.floor(gap / (1000 * 60 * 60 * 24)) * -1;
+
+   return dDay + 1;
+}
+
+
+
+const Form = ({ onToggleModal, onInsertChallenge, challenge, initial }) => {
+   const [goal, setGoal] = useState(challenge.goal);
+   const [motivate, setMotivate] = useState(challenge.motivate);
    const [message, setMessage] = useState('');
-   const [motivate, setMotivate] = useState('');
-   const [date, setDate] = useState(getToday());
-   const [endDay, setEndDay] = useState(getAfter30days(getToday()));
+   const [startDate, setStartDate] = useState(getToday());
+   //const [date, setDate] = useState(getToday());
+   const [endDate, setEndDate] = useState(getAfter30days(getToday()));
+   const [dday, setDday] = useState(getDday(startDate));
    const inputRef = useRef(null);
 
    const onChangeGoal = (e) => {
@@ -80,8 +94,8 @@ const Form = ({ onToggleModal, onInsertChallenge, onEditChallenge }) => {
    }
 
    const onChangeDate = (e) => {
-      setDate(e.target.value);
-      setEndDay(getAfter30days(e.target.value));
+      setStartDate(e.target.value);
+      setEndDate(getAfter30days(e.target.value));
    }
 
    const onChangeMotivate = (e) => {
@@ -94,7 +108,7 @@ const Form = ({ onToggleModal, onInsertChallenge, onEditChallenge }) => {
          setMessage('목표를 입력해주세요');
          inputRef.current.focus();
       } else {
-         onInsertChallenge(goal, date, endDay, motivate);
+         onInsertChallenge(goal, startDate, endDate, motivate, dday);
          onToggleModal();
       }
    }
@@ -109,6 +123,7 @@ const Form = ({ onToggleModal, onInsertChallenge, onEditChallenge }) => {
                   onChange={onChangeGoal}
                   name="goal" 
                   placeholder="Study React"
+                  autocomplete="off"
                   ref={inputRef}
                />
             </FormBlock>
@@ -117,11 +132,11 @@ const Form = ({ onToggleModal, onInsertChallenge, onEditChallenge }) => {
                <input 
                   type="date" 
                   name="date"
-                  value={date}
+                  value={startDate}
                   onChange={onChangeDate}
                   min={getToday()}
                />
-               <p>도전 종료일은 <span>{endDay}</span> 입니다</p>
+               <p>도전 종료일은 <span>{endDate}</span> 입니다</p>
             </FormBlock>
             <FormBlock>
                <label>MOTIVATE YOURSELF</label>

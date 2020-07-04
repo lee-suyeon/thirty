@@ -8,12 +8,13 @@ const BackBoard = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  height: 68vh;
+  height: 650px;
   position: relative;
   background-color: #ffffff;
   border-radius: 10px;
   box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.02);
   padding: 2.5rem;
+  margin-bottom: 100px;
 `
 
 const LeftBox = styled.div`
@@ -47,7 +48,7 @@ const Board = ({ children, visible, onToggleModal }) => {
    return (
       <>
          <BackBoard>
-            {!visible && 
+            {visible && 
                <div className="add-challenge">
                   <AddMessage>                  
                   <AddButton onClick={onToggleModal}/>

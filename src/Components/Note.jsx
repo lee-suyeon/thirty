@@ -44,10 +44,10 @@ const EditButton = styled(Edit)`
   }
 `
 
-const Note = ({ challenge, onEditChallenge }) => {
+const Note = ({ challenge, onEditForm }) => {
     return (
         <>
-            <EditButton onClick={onEditChallenge}/>
+            <EditButton onClick={onEditForm}/>
             <Content>
                 <h2>My Goal</h2>
                 <div className="challenge-cont">{challenge.goal}</div>
@@ -55,7 +55,7 @@ const Note = ({ challenge, onEditChallenge }) => {
             <Content>
                 <h2>Challenge period</h2>
                 <div className="challenge-cont">{challenge.startDate} ~ {challenge.endDate}</div>
-                <span className="d-day">도전 종료일까지 0일 남았습니다</span>
+                <span className="d-day">도전 종료일까지 {challenge.dday}일 남았습니다</span>
             </Content>
             <Content>
                 <h2>Motivate</h2>
