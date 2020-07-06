@@ -38,8 +38,6 @@ const Cell = memo(({ days, onCountCell }) => {
     const onClickCircle = () => {
         setDone(prev => !prev)
         onCountCell(done);
-        console.log("done", done);
-
       };
 
     return (

@@ -44,11 +44,11 @@ const AddButton = styled(AddCircleOutline)`
   }
 `
 
-const Board = ({ children, visible, onToggleModal }) => {
+const Board = ({ children, initial, onToggleModal }) => {
    return (
       <>
          <BackBoard>
-            {visible && 
+            {!initial && 
                <div className="add-challenge">
                   <AddMessage>                  
                   <AddButton onClick={onToggleModal}/>

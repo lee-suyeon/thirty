@@ -1,6 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useCallback } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Button from './Button';
+import { START_CHALLENGE } from '../App';
 
 const FormBlock = styled.div`
    label {
@@ -69,7 +70,8 @@ const getAfter30days = (date) => {
 
 const getDday = (date) => {
    const startDay = new Date(date);
-   const endDay = new Date(getAfter30days(getToday()));
+   const after30Days = getAfter30days(getToday());
+   const endDay = new Date(after30Days);
 
    const gap = startDay.getTime() - endDay.getTime();
    const dDay = Math.floor(gap / (1000 * 60 * 60 * 24)) * -1;
@@ -79,28 +81,27 @@ const getDday = (date) => {
 
 
 
-const Form = ({ onToggleModal, onInsertChallenge, challenge, initial }) => {
-   const [goal, setGoal] = useState(challenge.goal);
-   const [motivate, setMotivate] = useState(challenge.motivate);
+const Form = ({ onToggleModal, onInsertChallenge, challenge, initial, dispatch }) => {
+   const [goal, setGoal] = useState('');
    const [message, setMessage] = useState('');
    const [startDate, setStartDate] = useState(getToday());
-   //const [date, setDate] = useState(getToday());
    const [endDate, setEndDate] = useState(getAfter30days(getToday()));
-   const [dday, setDday] = useState(getDday(startDate));
+   const [motivate, setMotivate] = useState('');
    const inputRef = useRef(null);
-
-   const onChangeGoal = (e) => {
+   const dday = getDday(startDate);
+   
+   const onChangeGoal = useCallback((e) => {
       setGoal(e.target.value);
-   }
+   },[]);
 
-   const onChangeDate = (e) => {
+   const onChangeDate = useCallback((e) => {
       setStartDate(e.target.value);
       setEndDate(getAfter30days(e.target.value));
-   }
+   },[]);
 
-   const onChangeMotivate = (e) => {
+   const onChangeMotivate = useCallback((e) => {
       setMotivate(e.target.value);
-   }
+   },[]);
 
    const onSubmitForm = (e) => {
       e.preventDefault(); 
@@ -108,8 +109,19 @@ const Form = ({ onToggleModal, onInsertChallenge, challenge, initial }) => {
          setMessage('목표를 입력해주세요');
          inputRef.current.focus();
       } else {
-         onInsertChallenge(goal, startDate, endDate, motivate, dday);
          onToggleModal();
+         dispatch({ 
+            type: START_CHALLENGE, 
+            challenge: {
+               goal: goal,
+               startDate: startDate,
+               endDate: endDate,
+               dday: dday,
+               motivate: motivate
+            }
+         });
+         
+         console.log('close')
       }
    }
 
@@ -123,7 +135,7 @@ const Form = ({ onToggleModal, onInsertChallenge, challenge, initial }) => {
                   onChange={onChangeGoal}
                   name="goal" 
                   placeholder="Study React"
-                  autocomplete="off"
+                  autoComplete="off"
                   ref={inputRef}
                />
             </FormBlock>
@@ -144,7 +156,7 @@ const Form = ({ onToggleModal, onInsertChallenge, challenge, initial }) => {
                   name="motivate" 
                   placeholder="The truth is that everyone is bored, and devotes himself to cultivating habits."
                   value={motivate}
-                  maxLength="100"
+                  maxLength="47"
                   onChange={onChangeMotivate}
                ></textarea>
             </FormBlock>
