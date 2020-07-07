@@ -1,4 +1,4 @@
-import React, { useState, useReducer } from 'react';
+import React, { useState, useReducer, useEffect, useCallback } from 'react';
 import GlobalStyle from './Style/globalStyles';
 import Template from './Components/Template';
 import Modal from './Components/Modal';
@@ -6,15 +6,21 @@ import Board from './Components/Board';
 import DashBoard from './Components/DashBoard';
 import Form from './Components/Form';
 import CellTable from './Components/CellTable';
+import Button from './Components/Button';
+import Reset from './Components/Reset';
+import CheckMessage from './Components/CheckMessage';
 import styled, { ThemeProvider } from 'styled-components';
 import { FlashAuto } from '@styled-icons/material';
+
 
 
 
 const initialState = {
   modal : false,
   initial : false,
+  days: Array(30).fill().map((v, i) => i + 1),
   count: 0,
+  test: 'test',
   challenge: {
     goal: '',
     startDate: '',
@@ -24,34 +30,64 @@ const initialState = {
   },
 }
 
+export const TOGGLE_MODAL = 'TOGGLE_MODAL';
+export const START_CHALLENGE = 'START_CHALLENGE';
+export const CLICK_CELL = 'CLICK_CELL';
+export const INCREMENT = 'INCREMENT';
+export const DECREAMENT = 'DECREAMENT';
+export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
+
+
 const reducer = (state, action) => {
   switch(action.type) {
-    case CREATE_CHALLENGE:
+    case TOGGLE_MODAL: {
       return { 
-        modal: !action.modal,
+        ...state,
+        modal: !state.modal,
       }
-    case START_CHALLENGE: {
+    }
+    case START_CHALLENGE: 
       return {
+        ...state,
         challenge : action.challenge,
         initial: true,
       }
-    }
+    case INCREMENT: 
+      return {
+        ...state,
+        count: state.count + 1
+      }
+    case DECREAMENT: 
+      return {
+        ...state,
+        count: state.count - 1
+      }
+    case EDIT_CHALLENGE: 
+      console.log("state", state)
+      console.log("action", action.challenge)
+      return {
+        ...state,
+        challenge : action.challenge,
+        modal: true,
+      }
     default :
       return state;
   }
 }
 
-export const CREATE_CHALLENGE = 'CREATE_CHALLENGE';
-export const START_CHALLENGE = 'START_CHALLENGE';
+
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { modal, initial, count, challenge } = state;
+  const { modal, initial, count, challenge, days, edit } = state;
 
     // 모달창 open/close
-  const onToggleModal = () => {
-    dispatch({ type: CREATE_CHALLENGE, modal });
-  }
+  const onToggleModal = useCallback(() => {
+    dispatch({ type: TOGGLE_MODAL });
+  }, []);
+
+  console.log("challenge", challenge)
+
 
   return (
     <>
@@ -60,13 +96,17 @@ const App = () => {
           <Board initial={initial} onToggleModal={onToggleModal}>
             {initial &&
               <>
-                <DashBoard 
-                  //onEditForm={onEditForm}
-                  challenge={state.challenge}
+                <DashBoard
+                  edit={edit}
+                  onToggleModal={onToggleModal}
+                  dispatch={dispatch}
+                  count={count}
+                  challenge={challenge}
                   dispatch={dispatch}
                   />
-                <CellTable 
-                  // onCountCell={onCountCell}
+                <CellTable
+                  days={days}
+                  dispatch={dispatch}
                   />
               </>
               }
@@ -79,99 +119,14 @@ const App = () => {
                 <Form
                   dispatch={dispatch}
                   onToggleModal={onToggleModal} 
-                  // onInsertChallenge={onInsertChallenge}
                   challenge={challenge}
                   />
               </Modal>}
+              <CheckMessage message="Successfully checked" />
+              <CheckMessage message="Successfully canceled" />
+              <Reset />
         </Template>
     </>
   )
 }
-
-// const App = () => {
-  
-//   // const [modal, setModal] = useState(false);
-//   // const [initial, setInitial] = useState(true);
-//   // const [count, setCount] = useState(0);
-//   // const [challenge, setChallenge] = useState({
-//   //   goal: '',
-//   //   startDate: '',
-//   //   endDate: '',
-//   //   dday: '',
-//   //   motivate: ''
-//   // });
-
-//   // 모달창 open/close
-//   const onToggleModal = () => {
-//     dispatch({ type: TOGGLE_MODAL, modal })
-//   }
-
-//   // const onInsertChallenge = () => {
-
-//   // }
-
-//   // const onInsertChallenge = (goal, startDate, endDate, motivate, dday) => {
-//   //   const first = {
-//   //     goal,
-//   //     startDate,
-//   //     endDate,
-//   //     dday,
-//   //     motivate,
-//   //   }
-//   //   setChallenge(first);
-//   //   setInitial(false);
-//   // }
-
-
-
-//   const onEditForm = () => {
-//     onToggleModal();
-//   }
-
-//   // const onCountCell = (done) => {
-//   //   if(!done){
-//   //     console.log('countdone', done)
-//   //     setCount((prevCount) => prevCount + 1);
-//   //   } else {
-//   //     alert("really?");
-//   //     setCount((prevCount) => prevCount - 1);
-//   //   }
-//   // }
-
-//     return (
-//       <>
-//         <GlobalStyle />
-//           <Template>
-//             <Board visible={initial} onToggleModal={onToggleModal}>
-//               {!initial &&
-//                 <>
-//                   <DashBoard 
-//                     // onEditForm={onEditForm}
-//                     // challenge={challenge}
-//                     // count={count}
-//                     />
-//                   <CellTable 
-//                     // onCountCell={onCountCell}
-//                     />
-//                 </>
-//                 }
-//             </Board>
-//           </Template>
-//           {modal && 
-//             <Modal 
-//               title="YOUR CHALLENGE"
-//               onToggleModal={onToggleModal}
-//               >
-//                 <Form
-//                   // dispatch={dispatch}
-//                   // initial={initial}
-//                   // onToggleModal={onToggleModal} 
-//                   // onInsertChallenge={onInsertChallenge}
-//                   // challenge={challenge}
-//                   />
-//               </Modal>}
-//       </>
-//     )
-// }
-
 export default App;

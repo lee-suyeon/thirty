@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, memo } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 
 const CurrentBox = styled.div`
@@ -35,8 +35,8 @@ const DayCounter = styled.div`
     }
 `
 
-const CounterBox = ({ count }) => {
-
+const CounterBox = memo(({ count }) => {
+    console.log("count", count)
     return (
         <>
             <CurrentBox>
@@ -48,6 +48,6 @@ const CounterBox = ({ count }) => {
             </CurrentBox>
         </>
     )
-}
+});
 
 export default CounterBox;

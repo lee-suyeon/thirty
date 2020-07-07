@@ -1,5 +1,6 @@
 import React, { useState, useRef } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import { TOGGLE_MODAL } from '../App';
 import { Edit } from '@styled-icons/material/Edit';
 import { Close } from '@styled-icons/material/Close';
 
@@ -45,12 +46,16 @@ const EditButton = styled(Edit)`
 `
 
 
-const Note = ({ challenge, onEditForm }) => {
-    console.log("challenge", challenge);
-     const { goal, startDate, endDate, dday, motivate } = challenge;
+const Note = ({ challenge, dispatch }) => {
+    const { goal, startDate, endDate, dday, motivate } = challenge;
+
+    const onEditForm = () => {
+        dispatch({ type: TOGGLE_MODAL })
+    }
+
     return (
         <>
-            <EditButton/>
+            <EditButton onClick={onEditForm}/>
             <Content>
                 <h2>My Goal</h2>
                 <div className="challenge-cont">{goal}</div>
