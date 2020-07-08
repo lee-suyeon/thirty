@@ -7,10 +7,10 @@ import { CheckCircle } from '@styled-icons/material/CheckCircle';
 const showUp = keyframes`
   from { 
    opacity: 0;
-   transform: translate(-50%, 200px);
+   transform: translate(-50%, 100px);
 }
   to { 
-   opacity: 1 
+   opacity: 1;
    transform: translate(-50%, 0px);
    }
 `;
@@ -21,8 +21,8 @@ const hideDown = keyframes`
    transform: translate(-50%, 0px);
 }
   to { 
-   opacity: 0 
-   transform: translate(-50%, 200px);
+   opacity: 0;
+   transform: translate(-50%, 100px);
    }
 `;
 
@@ -39,64 +39,87 @@ box-shadow: 2px 2px 5px 5px rgba(0,0,0,0.02);
 padding: 1rem;
 z-index: 10;
 margin: 0 auto;
-animation: ${showUp} 0.25s forwards;
+animation-duration: 0.5s;
+animation-timing-function: ease-out;
+animation-name: ${showUp};
+animation-fill-mode: forwards;
+
 
 ${props =>
    props.disappear &&
    css`
-     animation-name: ${hideDown};
+      animation-name: ${hideDown};
    `}
 `
+
 
 const IndexColor = styled.div`
 width: 10px;
 height: 100%;
 position: absolute;
 top: 0; left: 0; botton: 0;
-background-color: #447d53;
+background-color: #c5c5c5;
 border-top-left-radius: 10px;
 border-bottom-left-radius: 10px;
+
+${props =>
+   props.checkState === 'check' &&
+   css`
+      background-color: #447d53;
+   `}
 `
-const MessageCont = styled.p`
+const MessageCont = styled.div`
    display: flex;
    position: absolute;
    top: 50%;
    left: 2.5rem;
    transform: translateY(-50%);
    font-size: 1.2rem;
+   font-weight: 500;
+
+   p{
+      margin-top: 0.3rem;
+   }
 `
 const CheckIcon = styled(CheckCircle)`
   display: block;
    margin-right: 1rem;
-  fill: #447d53;
+  fill: #c5c5c5;
   width: 30px;
+
+  ${props =>
+   props.checkState === 'check' &&
+   css`
+      fill: #447d53;
+   `}
 `
 
-const CheckMessage = ({ message, visible, dispatch }) => {
-   const [animate, setAnimate] = useState(false);
+const CheckMessage = ({ message, visible, checkState }) => {
+   const [animate, setAnimate] = useState(false); // 현재 트랜지션 효과를 보여주고 있는 중
    const [localVisible, setLocalVisible] = useState(visible); //실제로 컴포넌트가 사라지는 시점을 지연
 
-   //체크메세지가 false일때(안보일때는) -> 실행 X
-   // visible 트루일때 if절 실행
+   console.log('visible-check', visible);
 
    useEffect(() => {
-      // visible 값이 true -> false 가 되는 것을 감지
-      if (localVisible && !visible) { // localVisible은 true이고  visible이 false일때
-        setAnimate(true); // 애니메이션은 실행되고 있다. 
-        setTimeout(() => setAnimate(false), 250); // 250ms뒤에 애니메이션은 종료된다. 
+      // visible 값이 true에서 false로 바뀌는 시점을 감지하여
+      // animate 값을 true로 바꿔주고   
+      // setTimeout함수를 사용하여 250ms이후 false로 바꿔줘야 한다.
+      if(localVisible && !visible){
+         setAnimate(true);
+         setTimeout(() => setAnimate(false), 500); 
       }
-      setLocalVisible(visible); //false가 된다.  
-    }, [localVisible, visible]);
+      setLocalVisible(visible);
+   }, [localVisible, visible]);
 
    if(!animate && !localVisible) return null;
 
-   console.log('visible', visible);
    return (
       <>
-         <MessageBox disappear={!visible}>
-            <IndexColor />
+         <MessageBox disappear={!visible} >
+            <IndexColor checkState={checkState}/>
             <MessageCont>
-               <CheckIcon />{message}
+               <CheckIcon checkState={checkState}/>
+               <p>{checkState === 'check' ? "Successfully Checked" : "Successfully Canceled"}</p>
             </MessageCont>
          </MessageBox>
       </>

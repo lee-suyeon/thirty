@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 import { Replay } from '@styled-icons/material/Replay';
+import Button from './Button';
 
 const ResetButton = styled.button`
     position: fixed;
@@ -15,6 +16,8 @@ const ResetButton = styled.button`
    cursor: pointer;
    z-index: 5;
 `;
+
+
 
 const ReplayIcon = styled(Replay)`
     width: 30px;
