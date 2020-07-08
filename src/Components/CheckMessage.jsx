@@ -7,7 +7,7 @@ import { CheckCircle } from '@styled-icons/material/CheckCircle';
 const showUp = keyframes`
   from { 
    opacity: 0;
-   transform: translate(-50%, 100px);
+   transform: translate(-50%, 50px);
 }
   to { 
    opacity: 1;
@@ -22,7 +22,7 @@ const hideDown = keyframes`
 }
   to { 
    opacity: 0;
-   transform: translate(-50%, 100px);
+   transform: translate(-50%, 50px);
    }
 `;
 

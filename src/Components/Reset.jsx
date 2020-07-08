@@ -15,6 +15,7 @@ const ResetButton = styled.button`
    font-size: 0.9rem;
    cursor: pointer;
    z-index: 5;
+
 `;
 
 
@@ -22,6 +23,11 @@ const ResetButton = styled.button`
 const ReplayIcon = styled(Replay)`
     width: 30px;
     fill: #fff;
+    transition: 0.3s;
+    cursor: pointer;
+    &:hover {
+      transform: rotate(-90deg);
+    }
 `
 
 const Reset = ({ onClickReset }) => {
