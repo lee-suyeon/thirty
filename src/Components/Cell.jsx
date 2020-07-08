@@ -1,6 +1,6 @@
 import React, { memo, useState, useCallback } from 'react';
 import styled, { css, ThemeProvider } from 'styled-components';
-import { CLICK_CELL, INCREMENT, DECREAMENT } from '../App';
+import { CLICK_CELL, INCREMENT, DECREAMENT, TOGGLE_MESSAGE, CHECKED_CELL, CANCELED_CELL } from '../App';
 
 const colorStyles = css`
   ${props =>
@@ -22,37 +22,36 @@ const Circle = styled.div`
     cursor: pointer;
     color: #c5c5c5;
 
-    em.days{
-        position: absolute;
-        top: 50%; left: 50%;
-        transform: translate(-50%, -50%);
-        font-size: 4rem;
-        font-weight: 300;
-    }
-
     ${colorStyles}
 `
+const Days = styled.div`
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 4rem;
+    font-weight: 300;
 
-const Cell = memo(({ days, dispatch,  onCellCount }) => {
+`
+
+
+
+
+const Cell = memo(({ days, dispatch, dday, checkState }) => {
     const [done, setDone] = useState(false);
 
     const onClickCell = useCallback(() => {
         setDone(prev => !prev);
         if(done){
-            dispatch({ type: DECREAMENT })
-            console.log("-1")
+            dispatch({ type: CANCELED_CELL })
         } else {
-            console.log("+1")
-            dispatch({ type: INCREMENT })
+            dispatch({ type: CHECKED_CELL });
         }
 
       }, [done]);
-
-
     return (
         <>
             <Circle onClick={onClickCell} done={done}>
-                <em className="days">{days}</em>
+                <Days>{days}</Days>
             </Circle>
         </>
     )
