@@ -20,6 +20,7 @@ const initialState = {
   initial : false,
   days: Array(30).fill().map((v, i) => i + 1),
   count: 0,
+  checkMessage: false,
   test: 'test',
   challenge: {
     goal: '',
@@ -36,6 +37,7 @@ export const CLICK_CELL = 'CLICK_CELL';
 export const INCREMENT = 'INCREMENT';
 export const DECREAMENT = 'DECREAMENT';
 export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
+export const TOGGLE_MESSAGE = 'TOGGLE_MESSAGE';
 
 
 const reducer = (state, action) => {
@@ -63,12 +65,17 @@ const reducer = (state, action) => {
         count: state.count - 1
       }
     case EDIT_CHALLENGE: 
-      console.log("state", state)
-      console.log("action", action.challenge)
       return {
         ...state,
         challenge : action.challenge,
         modal: true,
+      }
+    case TOGGLE_MESSAGE: 
+    console.log('toggleaction', action)
+    console.log('togglestate', state)
+      return {
+        ...state,
+        checkMessage: !state.checkMessage,
       }
     default :
       return state;
@@ -79,15 +86,22 @@ const reducer = (state, action) => {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { modal, initial, count, challenge, days, edit } = state;
+  const { modal, initial, count, challenge, days, edit, checkMessage } = state;
 
     // 모달창 open/close
   const onToggleModal = useCallback(() => {
     dispatch({ type: TOGGLE_MODAL });
   }, []);
 
-  console.log("challenge", challenge)
+  console.log("checkMessage", checkMessage)
 
+  useEffect(() => {
+    if(checkMessage){
+      setTimeout(() => {
+        dispatch({ type: TOGGLE_MESSAGE });
+      }, 500)
+    }
+  }, [checkMessage])
 
   return (
     <>
@@ -110,6 +124,7 @@ const App = () => {
                   />
               </>
               }
+              <CheckMessage message="Successfully checked" visible={checkMessage} dispatch={dispatch}/>
           </Board>
           {modal && 
             <Modal 
@@ -122,8 +137,6 @@ const App = () => {
                   challenge={challenge}
                   />
               </Modal>}
-              <CheckMessage message="Successfully checked" />
-              <CheckMessage message="Successfully canceled" />
               <Reset />
         </Template>
     </>
