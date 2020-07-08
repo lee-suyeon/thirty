@@ -13,6 +13,7 @@ const ResetButton = styled.button`
    color: #fff;
    font-size: 0.9rem;
    cursor: pointer;
+   z-index: 5;
 `;
 
 const ReplayIcon = styled(Replay)`
@@ -20,10 +21,10 @@ const ReplayIcon = styled(Replay)`
     fill: #fff;
 `
 
-const Reset = ({ }) => {
+const Reset = ({ onClickReset }) => {
    return (
       <>
-         <ResetButton>
+         <ResetButton onClick={onClickReset}>
              <ReplayIcon />
              reset
          </ResetButton>

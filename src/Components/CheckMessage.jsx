@@ -73,22 +73,22 @@ const CheckIcon = styled(CheckCircle)`
 `
 
 const CheckMessage = ({ message, visible, dispatch }) => {
-   // const [animate, setAnimate] = useState(false);
-   // const [localVisible, setLocalVisible] = useState(visible); //실제로 컴포넌트가 사라지는 시점을 지연
+   const [animate, setAnimate] = useState(false);
+   const [localVisible, setLocalVisible] = useState(visible); //실제로 컴포넌트가 사라지는 시점을 지연
 
-   // //체크메세지가 false일때(안보일때는) -> 실행 X
-   // // visible 트루일때 if절 실행
+   //체크메세지가 false일때(안보일때는) -> 실행 X
+   // visible 트루일때 if절 실행
 
-   // useEffect(() => {
-   //    // visible 값이 true -> false 가 되는 것을 감지
-   //    if (localVisible && !visible) { // localVisible은 true이고  visible이 false일때
-   //      setAnimate(true); // 애니메이션은 실행되고 있다. 
-   //      setTimeout(() => setAnimate(false), 250); // 250ms뒤에 애니메이션은 종료된다. 
-   //    }
-   //    setLocalVisible(visible); //false가 된다.  
-   //  }, [localVisible, visible]);
+   useEffect(() => {
+      // visible 값이 true -> false 가 되는 것을 감지
+      if (localVisible && !visible) { // localVisible은 true이고  visible이 false일때
+        setAnimate(true); // 애니메이션은 실행되고 있다. 
+        setTimeout(() => setAnimate(false), 250); // 250ms뒤에 애니메이션은 종료된다. 
+      }
+      setLocalVisible(visible); //false가 된다.  
+    }, [localVisible, visible]);
 
-   // if(!animate && !localVisible) return null;
+   if(!animate && !localVisible) return null;
 
    console.log('visible', visible);
    return (

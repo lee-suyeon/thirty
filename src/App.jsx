@@ -38,6 +38,7 @@ export const INCREMENT = 'INCREMENT';
 export const DECREAMENT = 'DECREAMENT';
 export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
 export const TOGGLE_MESSAGE = 'TOGGLE_MESSAGE';
+export const RESET_CHALLENGE = 'RESET_CHALLENGE';
 
 
 const reducer = (state, action) => {
@@ -77,6 +78,23 @@ const reducer = (state, action) => {
         ...state,
         checkMessage: !state.checkMessage,
       }
+    case RESET_CHALLENGE: 
+      return {
+        ...state,
+        modal : false,
+        initial : false,
+        days: Array(30).fill().map((v, i) => i + 1),
+        count: 0,
+        checkMessage: false,
+        test: 'test',
+        challenge: {
+          goal: '',
+          startDate: '',
+          endDate: '',
+          dday: '',
+          motivate: ''
+        },
+      }
     default :
       return state;
   }
@@ -103,6 +121,12 @@ const App = () => {
     }
   }, [checkMessage])
 
+  const onClickReset = useCallback(() => {
+    dispatch({ type: RESET_CHALLENGE })
+    alert('정말로 reset하시겠습니까?');
+    console.log('reset');
+  });
+
   return (
     <>
       <GlobalStyle />
@@ -124,7 +148,7 @@ const App = () => {
                   />
               </>
               }
-              <CheckMessage message="Successfully checked" visible={checkMessage} dispatch={dispatch}/>
+            <CheckMessage message="Successfully checked" visible={checkMessage} dispatch={dispatch}/>
           </Board>
           {modal && 
             <Modal 
@@ -137,7 +161,7 @@ const App = () => {
                   challenge={challenge}
                   />
               </Modal>}
-              <Reset />
+              <Reset onClickReset={onClickReset}/>
         </Template>
     </>
   )
