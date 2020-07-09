@@ -5,6 +5,7 @@ import { AddCircleOutline } from '@styled-icons/material';
 import Cell from './Cell';
 
 const BackBoard = styled.div`
+   position: relative;
   width: 100%;
   display: flex;
   justify-content: space-between;
@@ -14,14 +15,9 @@ const BackBoard = styled.div`
   border-radius: 10px;
   box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.02);
   padding: 2.5rem;
-  margin-bottom: 100px;
+  margin-bottom: 50px;
 `
 
-const LeftBox = styled.div`
-   position: relative;
-   flex-basis: 28%;
-   margin-right: 2%;
-`
 const AddMessage = styled.div`
   position: absolute;
   top: 50%;
