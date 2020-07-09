@@ -1,6 +1,5 @@
 import React from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import Form from './Form';
 import { Close } from '@styled-icons/material/Close';
 
 const DarkBackground = styled.div`
@@ -8,7 +7,8 @@ const DarkBackground = styled.div`
    left: 0; top: 0;
    width: 100%; 
    height: 100%; 
-   background: rgba(22, 50, 25, 0.9);
+   background: ${props => props.background || 'rgba(22, 50, 25, 0.8);'}
+   z-index: 10;
 `
 const ModalBlock = styled.div`
    width: 490px;
@@ -19,7 +19,7 @@ const ModalBlock = styled.div`
    border-radius: 10px;
    box-shadow: 2px 2px 5px 5px rgba(0, 0, 0, 0.02);
    padding: 3rem;
-   z-index: 10;
+   z-index: 20;
    h2 {
       color: #447d53;
       font-size: 32px;
@@ -35,14 +35,15 @@ const CloseButton = styled(Close)`
   fill: #fff;
   width: 50px;
   cursor: pointer;
+  z-index: 30;
 `
 
 
-const Modal = ({ children, title, onToggleModal }) => {
+const Modal = ({ children, title, onToggleModal, background }) => {
 
     return (
         <>
-            <DarkBackground  />
+            <DarkBackground  background={background}/>
                 <CloseButton onClick={onToggleModal} />
                 <ModalBlock>
                     <h2>{title}</h2>

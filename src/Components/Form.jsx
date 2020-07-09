@@ -1,4 +1,4 @@
-import React, { useState, useRef, useCallback } from 'react';
+import React, { useState, useRef, useCallback, useEffect } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Button from './Button';
 import { START_CHALLENGE } from '../App';
@@ -13,7 +13,7 @@ const FormBlock = styled.div`
       display: inline-block;
       font-size: 1rem;
       color: tomato;
-      margin-left: 0.5rem;
+      margin-left: 1rem;
    }
    input, textarea {
       width: 100%;
@@ -81,7 +81,7 @@ const getDday = (date) => {
 
 
 
-const Form = ({ onToggleModal, onInsertChallenge, challenge, initial, dispatch }) => {
+const Form = ({ onToggleModal, challenge, initial, dispatch }) => {
    const [goal, setGoal] = useState('');
    const [message, setMessage] = useState('');
    const [startDate, setStartDate] = useState(getToday());
@@ -120,10 +120,17 @@ const Form = ({ onToggleModal, onInsertChallenge, challenge, initial, dispatch }
                motivate: motivate
             }
          });
-         
-         console.log('close')
       }
    }
+   console.log('fomr-initial', initial);
+
+   useEffect(() => {
+      if(initial){
+         setGoal(challenge.goal);
+         setMotivate(challenge.motivate);
+         setStartDate(challenge.startDate);
+      }
+   }, [challenge.goal, challenge.motivate, challenge.startDate])
 
    return (
       <>
@@ -140,13 +147,14 @@ const Form = ({ onToggleModal, onInsertChallenge, challenge, initial, dispatch }
                />
             </FormBlock>
             <FormBlock>
-               <label>START DAY</label>
+               <label>START DAY<span className="message">{initial && "날짜를 변경 할 수 없습니다"}</span></label>
                <input 
                   type="date" 
                   name="date"
                   value={startDate}
                   onChange={onChangeDate}
                   min={getToday()}
+                  disabled={initial}
                />
                <p>도전 종료일은 <span>{endDate}</span> 입니다</p>
             </FormBlock>

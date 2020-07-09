@@ -36,9 +36,9 @@ const EditButton = styled(Edit)`
   display: block;
   position: absolute;
   top: 0; right: 0;
+  cursor: pointer;
   fill: ${({ theme }) => theme.colors.subColor};
   width: 30px;
-  cursor: pointer;
   }  
   &:hover {
     fill:  ${({ theme }) => theme.colors.mainColor};

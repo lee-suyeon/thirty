@@ -8,6 +8,7 @@ import Form from './Components/Form';
 import CellTable from './Components/CellTable';
 import Button from './Components/Button';
 import Reset from './Components/Reset';
+import ResetMessage from './Components/ResetMessage';
 import CheckMessage from './Components/CheckMessage';
 import styled, { ThemeProvider } from 'styled-components';
 import { FlashAuto } from '@styled-icons/material';
@@ -19,7 +20,7 @@ const initialState = {
   modal : false,
   initial : false,
   count: 0,
-  checkState: '',
+  checkState: 'check',
   checkMessage: false,
   test: 'test',
   challenge: {
@@ -33,11 +34,7 @@ const initialState = {
 
 export const TOGGLE_MODAL = 'TOGGLE_MODAL';
 export const START_CHALLENGE = 'START_CHALLENGE';
-export const CLICK_CELL = 'CLICK_CELL';
-export const INCREMENT = 'INCREMENT';
-export const DECREAMENT = 'DECREAMENT';
 export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
-export const TOGGLE_MESSAGE = 'TOGGLE_MESSAGE';
 export const RESET_CHALLENGE = 'RESET_CHALLENGE';
 export const CHECKED_CELL = 'CHECKED_CELL';
 export const CANCELED_CELL = 'CANCELED_CELL';
@@ -83,19 +80,13 @@ const reducer = (state, action) => {
         ...state,
         checkMessage: false,
       }
-    // case TOGGLE_MESSAGE: 
-    // console.log('toggleaction', action)
-    // console.log('togglestate', state)
-    //   return {
-    //     ...state,
-    //     checkMessage: !state.checkMessage,
-    //   }
     case RESET_CHALLENGE: 
       return {
         ...state,
         modal : false,
         initial : false,
         count: 0,
+        checkState: '',
         checkMessage: false,
         test: 'test',
         challenge: {
@@ -115,7 +106,7 @@ const reducer = (state, action) => {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { modal, initial, count, challenge, days, edit, checkMessage, checkState } = state;
+  const { modal, initial, count, challenge, edit, checkMessage, checkState } = state;
 
     // 모달창 open/close
   const onToggleModal = useCallback(() => {
@@ -135,14 +126,10 @@ const App = () => {
     alert('정말로 reset하시겠습니까?');
   });
 
-  const onHideMessage = () => {
-    dispatch({ type: HIDE_MESSAGE })
-  }
-
   useEffect(() => {
     setTimeout(() => {
       dispatch({ type: HIDE_MESSAGE })
-    }, 1000)
+    }, 700)
   }, [checkMessage]);
 
 
@@ -154,15 +141,13 @@ const App = () => {
             {initial &&
               <>
                 <DashBoard
-                  edit={edit}
                   onToggleModal={onToggleModal}
                   dispatch={dispatch}
                   count={count}
                   challenge={challenge}
-                  dispatch={dispatch}
                   />
                 <CellTable
-                  dday={challenge.dday}
+                  checkState={checkState}
                   dispatch={dispatch}
                   />
               </>
@@ -178,6 +163,7 @@ const App = () => {
                   dispatch={dispatch}
                   onToggleModal={onToggleModal} 
                   challenge={challenge}
+                  initial={initial}
                   />
               </Modal>}
               <Reset onClickReset={onClickReset}/>
