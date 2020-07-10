@@ -18,8 +18,6 @@ const ResetButton = styled.button`
 
 `;
 
-
-
 const ReplayIcon = styled(Replay)`
     width: 30px;
     fill: #fff;
