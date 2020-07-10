@@ -1,7 +1,11 @@
-import React, { useState, useRef, useCallback, useEffect } from 'react';
+import React, { useState, useRef, useCallback, useEffect, useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
 import Button from './Button';
-import { START_CHALLENGE } from '../App';
+import { START_CHALLENGE, ChallengeContext, TOGGLE_MODAL } from '../App';
+
+const FormGroup = styled.form`
+   width: 100%;
+`
 
 const FormBlock = styled.div`
    label {
@@ -81,7 +85,9 @@ const getDday = (date) => {
 
 
 
-const Form = ({ onToggleModal, challenge, initial, dispatch }) => {
+const Form = ( ) => {
+   const { challenge, dispatch, initial } = useContext(ChallengeContext);
+
    const [goal, setGoal] = useState('');
    const [message, setMessage] = useState('');
    const [startDate, setStartDate] = useState(getToday());
@@ -109,7 +115,6 @@ const Form = ({ onToggleModal, challenge, initial, dispatch }) => {
          setMessage('목표를 입력해주세요');
          inputRef.current.focus();
       } else {
-         onToggleModal();
          dispatch({ 
             type: START_CHALLENGE, 
             challenge: {
@@ -120,9 +125,9 @@ const Form = ({ onToggleModal, challenge, initial, dispatch }) => {
                motivate: motivate
             }
          });
+         dispatch({ type: TOGGLE_MODAL });
       }
    }
-   console.log('fomr-initial', initial);
 
    useEffect(() => {
       if(initial){
@@ -130,12 +135,12 @@ const Form = ({ onToggleModal, challenge, initial, dispatch }) => {
          setMotivate(challenge.motivate);
          setStartDate(challenge.startDate);
       }
-   }, [challenge.goal, challenge.motivate, challenge.startDate])
+   }, [initial, challenge.goal, challenge.motivate, challenge.startDate])
 
    return (
       <>
-         <form onSubmit={onSubmitForm}>
-         <FormBlock>
+         <FormGroup onSubmit={onSubmitForm}>
+            <FormBlock>
                <label>MY GOAL<span className="message">{message}</span></label>
                <input
                   value={goal}
@@ -169,7 +174,7 @@ const Form = ({ onToggleModal, challenge, initial, dispatch }) => {
                ></textarea>
             </FormBlock>
             <Button title="START" type="subimt"/>
-         </form>
+         </FormGroup>
       </>
    )
 }

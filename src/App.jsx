@@ -1,28 +1,37 @@
-import React, { useState, useReducer, useEffect, useCallback } from 'react';
+import React, { useReducer, useEffect, useCallback, createContext, useMemo } from 'react';
 import GlobalStyle from './Style/globalStyles';
 import Template from './Components/Template';
-import Modal from './Components/Modal';
-import Board from './Components/Board';
-import DashBoard from './Components/DashBoard';
-import Form from './Components/Form';
-import CellTable from './Components/CellTable';
-import Button from './Components/Button';
+import AddMessage from './Components/AddMessage';
 import Reset from './Components/Reset';
 import ResetMessage from './Components/ResetMessage';
 import CheckMessage from './Components/CheckMessage';
+import ResultMessage from './Components/ResultMessage';
+import ChallengeBoard from './Components/ChallengeBoard';
+import StartChallenge from './Components/StartChallenge';
 import styled, { ThemeProvider } from 'styled-components';
 import { FlashAuto } from '@styled-icons/material';
 
 
-
+export const ChallengeContext = createContext({ // 초기값
+  initial : false,
+  cellState: 'unchecked',
+  challenge: {
+    goal: '',
+    startDate: '',
+    endDate: '',
+    dday: '',
+    motivate: ''
+  },
+  dispatch: () => {},
+});
 
 const initialState = {
-  modal : false,
   initial : false,
+  modal : false,
+  reset: false,
   count: 0,
-  checkState: 'check',
+  cellState: 'unchecked',
   checkMessage: false,
-  test: 'test',
   challenge: {
     goal: '',
     startDate: '',
@@ -34,11 +43,14 @@ const initialState = {
 
 export const TOGGLE_MODAL = 'TOGGLE_MODAL';
 export const START_CHALLENGE = 'START_CHALLENGE';
-export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
-export const RESET_CHALLENGE = 'RESET_CHALLENGE';
 export const CHECKED_CELL = 'CHECKED_CELL';
 export const CANCELED_CELL = 'CANCELED_CELL';
+export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
 export const HIDE_MESSAGE = 'HIDE_MESSAGE';
+export const RESET_CHALLENGE = 'RESET_CHALLENGE';
+
+export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';
+export const RESET_MESSAGE = 'RESET_MESSAGE';
 
 
 const reducer = (state, action) => {
@@ -60,14 +72,14 @@ const reducer = (state, action) => {
         ...state,
         count: state.count + 1,
         checkMessage: true,
-        checkState: 'check',
+        cellState: 'checked',
       }
     case CANCELED_CELL: 
       return {
         ...state,
         count: state.count - 1,
         checkMessage: true,
-        checkState: 'cancel',
+        cellState: 'unchecked',
       }
     case EDIT_CHALLENGE: 
       return {
@@ -80,23 +92,18 @@ const reducer = (state, action) => {
         ...state,
         checkMessage: false,
       }
-    case RESET_CHALLENGE: 
+    case RESET_MESSAGE: 
       return {
         ...state,
-        modal : false,
-        initial : false,
-        count: 0,
-        checkState: '',
-        checkMessage: false,
-        test: 'test',
-        challenge: {
-          goal: '',
-          startDate: '',
-          endDate: '',
-          dday: '',
-          motivate: ''
-        },
+        reset: !state.reset,
       }
+    case CLOSE_MESSAGE: 
+      return {
+        ...state,
+        reset: false,
+      }
+    case RESET_CHALLENGE: 
+      return initialState;
     default :
       return state;
   }
@@ -106,25 +113,20 @@ const reducer = (state, action) => {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { modal, initial, count, challenge, edit, checkMessage, checkState } = state;
-
-    // 모달창 open/close
-  const onToggleModal = useCallback(() => {
-    dispatch({ type: TOGGLE_MODAL });
-  }, []);
-
-  // useEffect(() => {
-  //   if(checkMessage){
-  //     setTimeout(() => {
-  //       dispatch({ type: CHECKED_CELL });
-  //     }, 500)
-  //   }
-  // }, [checkMessage])
+  const { modal, initial, count, challenge, reset, checkMessage, cellState } = state;
 
   const onClickReset = useCallback(() => {
-    dispatch({ type: RESET_CHALLENGE })
-    alert('정말로 reset하시겠습니까?');
-  });
+    dispatch({ type: RESET_MESSAGE })
+  }, []);
+
+  const onClickConfirm = useCallback(() => {
+    dispatch({ type: RESET_MESSAGE });
+    dispatch({ type: RESET_CHALLENGE});
+  },[]);
+
+  const onClickCancel = useCallback(() => {
+    dispatch({ type: CLOSE_MESSAGE });
+  }, []);
 
   useEffect(() => {
     setTimeout(() => {
@@ -132,43 +134,31 @@ const App = () => {
     }, 700)
   }, [checkMessage]);
 
+  const value = useMemo(() => (
+    { challenge: challenge, dispatch, initial, count, cellState }
+  ), [challenge, initial, count, cellState]);
+
 
   return (
-    <>
-      <GlobalStyle />
+  <>
+    <GlobalStyle />
+      <ChallengeContext.Provider value={value}>
         <Template>
-          <Board initial={initial} onToggleModal={onToggleModal}>
-            {initial &&
-              <>
-                <DashBoard
-                  onToggleModal={onToggleModal}
-                  dispatch={dispatch}
-                  count={count}
-                  challenge={challenge}
-                  />
-                <CellTable
-                  checkState={checkState}
-                  dispatch={dispatch}
-                  />
-              </>
-              }
-            <CheckMessage checkState={checkState}  visible={checkMessage}/>
-          </Board>
-          {modal && 
-            <Modal 
-              title="YOUR CHALLENGE"
-              onToggleModal={onToggleModal}
-              >
-                <Form
-                  dispatch={dispatch}
-                  onToggleModal={onToggleModal} 
-                  challenge={challenge}
-                  initial={initial}
-                  />
-              </Modal>}
-              <Reset onClickReset={onClickReset}/>
+          <AddMessage />
+          <ChallengeBoard 
+            visible={initial}
+            count={count}
+            cellState={cellState}
+            />
+          <CheckMessage cellState={cellState}  visible={checkMessage}/>
+
+              {/* <ResultMessage visible={modal} count={count} dday={challenge.dday}/> */}
         </Template>
-    </>
+        {reset && <ResetMessage onClickConfirm={onClickConfirm} onClickCancel={onClickCancel}/>}
+        {modal && <StartChallenge />}
+        <Reset onClickReset={onClickReset}/>
+      </ChallengeContext.Provider>
+  </>
   )
 }
 export default App;
