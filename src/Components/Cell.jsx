@@ -1,6 +1,6 @@
-import React, { memo, useState, useCallback } from 'react';
+import React, { memo, useState, useCallback, useContext, useEffect } from 'react';
 import styled, { css, ThemeProvider } from 'styled-components';
-import { CLICK_CELL, INCREMENT, DECREAMENT, TOGGLE_MESSAGE, CHECKED_CELL, CANCELED_CELL } from '../App';
+import { ChallengeContext, CHECKED_CELL, CANCELED_CELL } from '../App';
 
 const colorStyles = css`
   ${props =>
@@ -30,24 +30,43 @@ const Days = styled.div`
     transform: translate(-50%, -50%);
     font-size: 4rem;
     font-weight: 300;
-
 `
 
 
 
 
-const Cell = memo(({ days, dispatch, dday, checkState }) => {
+const Cell = memo(({ days }) => {
+    const { dispatch } = useContext(ChallengeContext);
     const [done, setDone] = useState(false);
+    const [animate, setAnimate] = useState(false);
+
+    useEffect(() => {
+        if(animate){
+            setTimeout(() => {
+                setAnimate(false);
+                console.log("animate-effect", animate);
+            }, 1000);
+        }
+    }, [animate]);
+
+    console.log("animate", animate);
 
     const onClickCell = useCallback(() => {
-        setDone(prev => !prev);
-        if(done){
-            dispatch({ type: CANCELED_CELL })
+        setDone(true);
+        setAnimate(true);
+        if(animate){
+            return;
         } else {
-            dispatch({ type: CHECKED_CELL });
+            if(done){
+                setDone(false);
+                dispatch({ type: CANCELED_CELL });
+            } else {
+                setDone(true);
+                dispatch({ type: CHECKED_CELL });
+            }
         }
+      }, [done, animate]);
 
-      }, [done]);
     return (
         <>
             <Circle onClick={onClickCell} done={done}>

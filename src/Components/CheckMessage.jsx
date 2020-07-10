@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import styled, { keyframes, css  } from 'styled-components';
-import { TOGGLE_MESSAGE } from '../App';
 import { CheckCircle } from '@styled-icons/material/CheckCircle';
 
 
@@ -28,7 +27,7 @@ const hideDown = keyframes`
 
 const MessageBox = styled.div`
 position: absolute;
-bottom: -5%;
+bottom: -2%;
 left: 50%;
 transform: translateX(-50%);
 width: 330px;
@@ -63,7 +62,7 @@ border-top-left-radius: 10px;
 border-bottom-left-radius: 10px;
 
 ${props =>
-   props.checkState === 'check' &&
+   props.cellState === 'checked' &&
    css`
       background-color: #447d53;
    `}
@@ -88,17 +87,15 @@ const CheckIcon = styled(CheckCircle)`
   width: 30px;
 
   ${props =>
-   props.checkState === 'check' &&
+   props.cellState === 'checked' &&
    css`
       fill: #447d53;
    `}
 `
 
-const CheckMessage = ({ message, visible, checkState }) => {
+const CheckMessage = ({ visible, cellState }) => {
    const [animate, setAnimate] = useState(false); // 현재 트랜지션 효과를 보여주고 있는 중
    const [localVisible, setLocalVisible] = useState(visible); //실제로 컴포넌트가 사라지는 시점을 지연
-
-   console.log('visible-check', visible);
 
    useEffect(() => {
       // visible 값이 true에서 false로 바뀌는 시점을 감지하여
@@ -116,10 +113,10 @@ const CheckMessage = ({ message, visible, checkState }) => {
    return (
       <>
          <MessageBox disappear={!visible} >
-            <IndexColor checkState={checkState}/>
+            <IndexColor cellState={cellState}/>
             <MessageCont>
-               <CheckIcon checkState={checkState}/>
-               <p>{checkState === 'check' ? "Successfully Checked" : "Successfully Canceled"}</p>
+               <CheckIcon cellState={cellState}/>
+               <p>{cellState === 'checked' ? "Successfully Checked" : "Successfully Canceled"}</p>
             </MessageCont>
          </MessageBox>
       </>
