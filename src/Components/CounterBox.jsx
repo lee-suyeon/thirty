@@ -28,7 +28,7 @@ const DayCounter = styled.div`
         content: '';
         width: 5px;
         height: 100px;
-        background-color: #447d53;
+        background-color: ${({ theme }) => theme.colors.mainColor};
         position: absolute;
         bottom: 1.9rem; right: 7rem;
         transform: rotate(45deg);
@@ -36,7 +36,8 @@ const DayCounter = styled.div`
 `
 
 const CounterBox = memo(({ count }) => {
-    console.log("count", count)
+    
+
     return (
         <>
             <CurrentBox>

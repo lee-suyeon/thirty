@@ -1,8 +1,7 @@
-import React, { useState, useRef } from 'react';
+import React, { useContext, memo, useCallback } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { TOGGLE_MODAL } from '../App';
+import { ChallengeContext, TOGGLE_MODAL } from '../App';
 import { Edit } from '@styled-icons/material/Edit';
-import { Close } from '@styled-icons/material/Close';
 
 
 
@@ -19,7 +18,7 @@ const Content = styled.div`
         font-size: 1.5rem;
         font-weight: 500;
         line-height: 1.5;
-        border-bottom: 2px solid #d4e2d4;
+        border-bottom: 1px solid ${({ theme }) => theme.colors.mainColor};
         padding: 0 0.2rem;
     }
     span.d-day{
@@ -46,12 +45,14 @@ const EditButton = styled(Edit)`
 `
 
 
-const Note = ({ challenge, dispatch }) => {
+const Note = memo(() => {
+    const { challenge, dispatch } = useContext(ChallengeContext);
     const { goal, startDate, endDate, dday, motivate } = challenge;
 
-    const onEditForm = () => {
+
+    const onEditForm = useCallback(() => {
         dispatch({ type: TOGGLE_MODAL })
-    }
+    }, [])
 
     return (
         <>
@@ -71,6 +72,6 @@ const Note = ({ challenge, dispatch }) => {
             </Content>
         </>
     )
-}
+});
 
 export default Note;
