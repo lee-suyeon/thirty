@@ -142,7 +142,6 @@ const App = () => {
             cellState={cellState}
             />
           <CheckMessage/>
-
         </Template>
         <StartChallenge 
           visible={modal.form}/>
