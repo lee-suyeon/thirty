@@ -31,7 +31,7 @@ const AddMessage = () => {
    const { dispatch, initial } = useContext(ChallengeContext);
 
    const onClickAddButton = () => {
-      dispatch({ type: TOGGLE_MODAL });
+      dispatch({ type: TOGGLE_MODAL, form: true });
     }
 
    if(initial) return null;

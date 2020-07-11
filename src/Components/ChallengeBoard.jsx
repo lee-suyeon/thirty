@@ -19,7 +19,8 @@ const RightBox = styled.div`
 `
 
 
-const ChallengeBoard = ({ visible, count, checkState }) => {
+const ChallengeBoard = ({ visible, count }) => {
+
 
    if(!visible) return null;
    return (
@@ -29,9 +30,7 @@ const ChallengeBoard = ({ visible, count, checkState }) => {
             <CounterBox count={count}/>
          </LeftBox>
          <RightBox>
-            <CellTable
-               checkState={checkState}
-            />
+            <CellTable />
          </RightBox>
       </>
    )

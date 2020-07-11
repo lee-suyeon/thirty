@@ -1,28 +1,15 @@
-import React, { useContext } from 'react';
+import React, { useContext, useCallback } from 'react';
 import styled, { ThemeProvider, css } from 'styled-components';
 import { Close } from '@styled-icons/material/Close';
 import { ChallengeContext, TOGGLE_MODAL } from '../App';
 
 const sizeStyles = css`
   ${props =>
-    props.size === 'large' &&
-    css`
-      height: 3rem;
-      font-size: 1.25rem;
-    `}
-
-  ${props =>
-    props.size === 'medium' &&
+    props.size === 'small' &&
     css`
       width: 450px;
+      padding: 2rem;
     `}
-
-    ${props =>
-      props.size === 'small' &&
-      css`
-        width: 450px;
-        padding: 2rem;
-      `}
 `;
 
 const DarkBackground = styled.div`
@@ -60,7 +47,7 @@ const ModalBlock = styled.div`
 
 `
 const CloseButton = styled(Close)`
-  display: ${props => props.hide || 'display'}
+  display: 'block';
   position: absolute;
   top: 1rem; right: 1rem;
   fill: #fff;
@@ -70,17 +57,17 @@ const CloseButton = styled(Close)`
 `
 
 
-const Modal = ({ children, title, size, background, hide }) => {
+const Modal = ({ children, title, size, background }) => {
   const { dispatch } = useContext(ChallengeContext);
 
-  const onClickClose = () => {
+  const onClickClose = useCallback(() => {
     dispatch({ type: TOGGLE_MODAL });
-  }
+  }, []);
 
     return (
       <>
-        <DarkBackground  background={background}/>
-          <CloseButton hide={hide} onClick={onClickClose} />
+        <DarkBackground  background={background} onClick={onClickClose}/>
+          <CloseButton onClick={onClickClose} />
           <ModalBlock size={size}>
               <h2>{title}</h2>
               {children}

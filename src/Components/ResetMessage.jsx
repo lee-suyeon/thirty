@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import { CLOSE_MESSAGE, RESET_CHALLENGE  } from '../App';
+import { TOGGLE_MODAL, RESET_CHALLENGE } from '../App';
 import Button from './Button';
 import Modal from './Modal';
 
@@ -18,8 +18,19 @@ const Info = styled.p`
 `
 
 
-const ResetMessage = ({ onClickConfirm, onClickCancel }) => {
+const ResetMessage = ({ visible, dispatch }) => {
 
+    const onClickConfirm = useCallback(() => {
+        dispatch({ type: RESET_CHALLENGE });
+        dispatch({ type: TOGGLE_MODAL, reset: false });
+      },[]);
+    
+    const onClickCancel = useCallback(() => {
+        dispatch({ type: TOGGLE_MODAL, reset: false });
+        console.log('cancel');
+    }, []);
+
+    if(!visible) return null;
     return (
         <>
             <Modal

@@ -125,7 +125,7 @@ const Form = ( ) => {
                motivate: motivate
             }
          });
-         dispatch({ type: TOGGLE_MODAL });
+         dispatch({ type: TOGGLE_MODAL, form: false });
       }
    }
 

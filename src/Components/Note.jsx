@@ -51,7 +51,7 @@ const Note = memo(() => {
 
 
     const onEditForm = useCallback(() => {
-        dispatch({ type: TOGGLE_MODAL })
+        dispatch({ type: TOGGLE_MODAL, form: true });
     }, [])
 
     return (
