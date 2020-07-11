@@ -1,13 +1,22 @@
-import React, { useState, useRef, memo } from 'react';
+import React, { useState, useRef, memo, useContext } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
+import { TOGGLE_MODAL, ChallengeContext } from '../App';
+import { InsertChartOutlined } from '@styled-icons/material/InsertChartOutlined';
+
+
+const CurrentWrap = styled.div`
+    position: relative;
+    width: 100%;
+`
 
 const CurrentBox = styled.div`
     position: relative;
     width: 100%;
-    height: 230px;
+    height: 195px;
     background-color: #f4f7f3;
     border: 1px solid #cfd7cd;
-    padding: 1rem;
+    padding: 1rem 2.5rem;
+    margin-top: 1rem;
 `
 
 const DayCounter = styled.div`
@@ -17,36 +26,56 @@ const DayCounter = styled.div`
     font-weight: 600;
     color: #447d53;
     em.current-count{
-        position: absolute;
-        bottom: 5.6rem; right: 8.75rem;
+       display: block;
     }
     strong.total-count{
-        position: absolute;
-        bottom: 1rem; right: 1rem;
-    }
-    strong.total-count:before{
-        content: '';
-        width: 5px;
-        height: 100px;
-        background-color: ${({ theme }) => theme.colors.mainColor};
-        position: absolute;
-        bottom: 1.9rem; right: 7rem;
-        transform: rotate(45deg);
+        display: block;
+        text-align: right;
     }
 `
+const Bar = styled.div`
+    width: 5px;
+    height: 100px;
+    background-color: ${({ theme }) => theme.colors.mainColor};
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+`
 
-const CounterBox = memo(({ count }) => {
-    
+const Report = styled(InsertChartOutlined)`
+  display: block;
+  position: absolute;
+  top: -5px; right: 0;
+  cursor: pointer;
+  fill: ${({ theme }) => theme.colors.subColor};
+  width: 30px;
+  }  
+  &:hover {
+    fill:  ${({ theme }) => theme.colors.mainColor};
+  }
+`
+
+const CounterBox = memo(() => {
+    const { dispatch, count } = useContext(ChallengeContext);
+
+    const onClickReport = () => {
+        dispatch({ type: TOGGLE_MODAL, report: true });
+    }
 
     return (
         <>
-            <CurrentBox>
+            <CurrentWrap>
                 <h2>Current Count</h2>
-                <DayCounter>
-                    <em className="current-count">{count < 10 ? `0${count}` : count}</em>
-                    <strong className="total-count">30</strong>
-                </DayCounter>
-            </CurrentBox>
+                <Report onClick={onClickReport}/>
+                <CurrentBox>
+                    <DayCounter>
+                        <em className="current-count">{count < 10 ? `0${count}` : count}</em>
+                        <Bar />
+                        <strong className="total-count">30</strong>
+                    </DayCounter>
+                </CurrentBox>
+            </CurrentWrap>
         </>
     )
 });

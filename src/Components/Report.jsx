@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import { CLOSE_MESSAGE  } from '../App';
+import { TOGGLE_MODAL, ChallengeContext  } from '../App';
 import Button from './Button';
 import Modal from './Modal';
 
@@ -57,48 +57,49 @@ const ButtonGroup = styled.div`
 `
 
 
-const ResultMessage = ({ count, dday, visible }) => {
-    const [resultMessage, setResultMessage] = useState('Good Job! 👌');
-    //const [localVisible, setLocalVisible] = useState(visible);
+const Report = ({ count, visible, dispatch }) => {
+    const [resultMessage, setResultMessage] = useState('');
 
     useEffect(() => {
-        if(dday === 0){
-            if(count === 0){
-                setResultMessage('도전 실패! 😭');
-            } else if(count >= 1 && count < 10){
-                setResultMessage('분발하세요! 💪');
-            } else if(count >= 10 && count < 20){
-                setResultMessage('좀 더 열심히! 👌');
-            } else if(count >= 20 && count < 30){
-                setResultMessage('잘 했어요! 👍');
-            } else if(count === 30){
-                setResultMessage('🎉도전 성공!!! 👏');
-            }
+        if(count === 0){
+            setResultMessage('도전 실패! 😭');
+        } else if(count >= 1 && count < 10){
+            setResultMessage('분발하세요! 💪');
+        } else if(count >= 10 && count < 20){
+            setResultMessage('좀 더 열심히! 👌');
+        } else if(count >= 20 && count < 30){
+            setResultMessage('잘 했어요! 👍');
+        } else if(count === 30){
+            setResultMessage('🎉도전 성공!!! 👏');
         }
-    }, [count, dday]);
+    }, [count]);
 
-    if(!visible && dday !== 0) return null;
+    const onClickConfirm = useCallback(() => {
+        dispatch({ type: TOGGLE_MODAL, report: false });
+      },[]);
+    
+
+    if(!visible) return null;
     return (
         <>
             <Modal
-                title="CHALLENGE RESULT" 
-                size="medium">
+                title="CHALLENGE REPORT" 
+                size="small">
                 <ResultCircle>
                     <div className="count">{count < 10 ? `0${count}` : count}</div>
                     <Bar />
                     <div className="total">30</div>
                 </ResultCircle>
                 <ResultCont>
-                    <span>SUCCESS RATE : {count / 30 * 100}%</span>
+                    <span>SUCCESS RATE : {Math.round(count / 30 * 100)}%</span>
                     <em>{resultMessage}</em>
                 </ResultCont>
                 <ButtonGroup>
-                    <Button title="RESET" size="medium"/>
-                    <Button title="CANCEL" size="medium"/>
+                    <Button title="OK" onClick={onClickConfirm}/>
                 </ButtonGroup>
             </Modal>
         </>
     )
 }
 
-export default ResultMessage;
+export default Report;
