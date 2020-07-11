@@ -5,10 +5,11 @@ import Cell from './Cell';
 
 const dayNumbers = Array(30).fill().map((v, i) => i + 1);
 
-const CellTable = ({ dday, checkState }) => {
+const CellTable = ({ dday }) => {
+
     return (
         <>
-            {dayNumbers.map((v, i) => <Cell key={`${i + 1}days`} days={v} dday={dday} checkState={checkState} />)}
+            {dayNumbers.map((v, i) => <Cell key={`${i + 1}days`} days={v} dday={dday} />)}
         </>
     )
 }

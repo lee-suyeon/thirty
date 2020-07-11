@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import styled, { keyframes, css  } from 'styled-components';
 import { CheckCircle } from '@styled-icons/material/CheckCircle';
+import { ChallengeContext } from '../App';
 
 
 const showUp = keyframes`
@@ -38,7 +39,7 @@ box-shadow: 2px 2px 5px 5px rgba(0,0,0,0.02);
 padding: 1rem;
 z-index: 10;
 margin: 0 auto;
-animation-duration: 0.5s;
+animation-duration: 0.4s;
 animation-timing-function: ease-out;
 animation-name: ${showUp};
 animation-fill-mode: forwards;
@@ -93,26 +94,25 @@ const CheckIcon = styled(CheckCircle)`
    `}
 `
 
-const CheckMessage = ({ visible, cellState }) => {
-   const [animate, setAnimate] = useState(false); // 현재 트랜지션 효과를 보여주고 있는 중
-   const [localVisible, setLocalVisible] = useState(visible); //실제로 컴포넌트가 사라지는 시점을 지연
+const CheckMessage = () => {
+   const { cellState, check } = useContext(ChallengeContext);
+
+   const [animate, setAnimate] = useState(false); 
+   const [localVisible, setLocalVisible] = useState(check);
 
    useEffect(() => {
-      // visible 값이 true에서 false로 바뀌는 시점을 감지하여
-      // animate 값을 true로 바꿔주고   
-      // setTimeout함수를 사용하여 250ms이후 false로 바꿔줘야 한다.
-      if(localVisible && !visible){
+      if(localVisible && !check){
          setAnimate(true);
-         setTimeout(() => setAnimate(false), 500); 
+         setTimeout(() => setAnimate(false), 400); 
       }
-      setLocalVisible(visible);
-   }, [localVisible, visible]);
+      setLocalVisible(check);
+   }, [localVisible, check]);
 
    if(!animate && !localVisible) return null;
 
    return (
       <>
-         <MessageBox disappear={!visible} >
+         <MessageBox disappear={!check} >
             <IndexColor cellState={cellState}/>
             <MessageCont>
                <CheckIcon cellState={cellState}/>

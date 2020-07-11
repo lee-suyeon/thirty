@@ -36,34 +36,31 @@ const Days = styled.div`
 
 
 const Cell = memo(({ days }) => {
-    const { dispatch } = useContext(ChallengeContext);
+    const { dispatch, check } = useContext(ChallengeContext);
     const [done, setDone] = useState(false);
     const [animate, setAnimate] = useState(false);
 
     useEffect(() => {
-        if(animate){
+        if(check){
             setTimeout(() => {
                 setAnimate(false);
-                console.log("animate-effect", animate);
-            }, 1000);
+            }, 600)
         }
-    }, [animate]);
-
-    console.log("animate", animate);
+    }, [check, animate]);
 
     const onClickCell = useCallback(() => {
-        setDone(true);
         setAnimate(true);
-        if(animate){
+        if(animate && check){
             return;
+        } 
+        if(done) {
+            setDone(false);
+            setAnimate(true);
+            dispatch({ type: CANCELED_CELL });
         } else {
-            if(done){
-                setDone(false);
-                dispatch({ type: CANCELED_CELL });
-            } else {
-                setDone(true);
-                dispatch({ type: CHECKED_CELL });
-            }
+            setDone(true);
+            setAnimate(true);
+            dispatch({ type: CHECKED_CELL });
         }
       }, [done, animate]);
 

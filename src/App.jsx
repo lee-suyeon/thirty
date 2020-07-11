@@ -5,15 +5,23 @@ import AddMessage from './Components/AddMessage';
 import Reset from './Components/Reset';
 import ResetMessage from './Components/ResetMessage';
 import CheckMessage from './Components/CheckMessage';
-import ResultMessage from './Components/ResultMessage';
+import Report from './Components/Report';
 import ChallengeBoard from './Components/ChallengeBoard';
 import StartChallenge from './Components/StartChallenge';
 import styled, { ThemeProvider } from 'styled-components';
 import { FlashAuto } from '@styled-icons/material';
+import { CheckCircleOutlineDimensions } from '@styled-icons/material/CheckCircleOutline';
 
 
 export const ChallengeContext = createContext({ // 초기값
   initial : false,
+  check: false,
+  modal: {
+    form: false,
+    report: false,
+    reset: false,
+  },
+  count: 0,
   cellState: 'unchecked',
   challenge: {
     goal: '',
@@ -27,11 +35,14 @@ export const ChallengeContext = createContext({ // 초기값
 
 const initialState = {
   initial : false,
-  modal : false,
-  reset: false,
+  check: false,
+  modal: {
+    form: false,
+    report: false,
+    reset: false,
+  },
   count: 0,
   cellState: 'unchecked',
-  checkMessage: false,
   challenge: {
     goal: '',
     startDate: '',
@@ -43,23 +54,22 @@ const initialState = {
 
 export const TOGGLE_MODAL = 'TOGGLE_MODAL';
 export const START_CHALLENGE = 'START_CHALLENGE';
+export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
 export const CHECKED_CELL = 'CHECKED_CELL';
 export const CANCELED_CELL = 'CANCELED_CELL';
-export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
-export const HIDE_MESSAGE = 'HIDE_MESSAGE';
+export const HIDE_CHECKMESSAGE = 'HIDE_CHECKMESSAGE';
 export const RESET_CHALLENGE = 'RESET_CHALLENGE';
-
-export const CLOSE_MESSAGE = 'CLOSE_MESSAGE';
-export const RESET_MESSAGE = 'RESET_MESSAGE';
-
 
 const reducer = (state, action) => {
   switch(action.type) {
-    case TOGGLE_MODAL: {
-      return { 
+    case TOGGLE_MODAL: 
+      return {
         ...state,
-        modal: !state.modal,
-      }
+        modal: {
+          form: action.form,
+          report: action.report,
+          reset: action.reset,
+        }
     }
     case START_CHALLENGE: 
       return {
@@ -67,40 +77,29 @@ const reducer = (state, action) => {
         challenge : action.challenge,
         initial: true,
       }
+    case EDIT_CHALLENGE: 
+    return {
+      ...state,
+      challenge : action.challenge,
+    }
     case CHECKED_CELL: 
       return {
         ...state,
         count: state.count + 1,
-        checkMessage: true,
+        check: true,
         cellState: 'checked',
       }
     case CANCELED_CELL: 
       return {
         ...state,
         count: state.count - 1,
-        checkMessage: true,
+        check: true,
         cellState: 'unchecked',
       }
-    case EDIT_CHALLENGE: 
+    case HIDE_CHECKMESSAGE: 
       return {
         ...state,
-        challenge : action.challenge,
-        modal: true,
-      }
-    case HIDE_MESSAGE: 
-      return {
-        ...state,
-        checkMessage: false,
-      }
-    case RESET_MESSAGE: 
-      return {
-        ...state,
-        reset: !state.reset,
-      }
-    case CLOSE_MESSAGE: 
-      return {
-        ...state,
-        reset: false,
+        check: false,
       }
     case RESET_CHALLENGE: 
       return initialState;
@@ -113,30 +112,22 @@ const reducer = (state, action) => {
 
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState);
-  const { modal, initial, count, challenge, reset, checkMessage, cellState } = state;
+  const { modal, initial, count, challenge, cellState, check } = state;
 
   const onClickReset = useCallback(() => {
-    dispatch({ type: RESET_MESSAGE })
+    dispatch({ type: TOGGLE_MODAL, reset: true });
   }, []);
 
-  const onClickConfirm = useCallback(() => {
-    dispatch({ type: RESET_MESSAGE });
-    dispatch({ type: RESET_CHALLENGE});
-  },[]);
-
-  const onClickCancel = useCallback(() => {
-    dispatch({ type: CLOSE_MESSAGE });
-  }, []);
 
   useEffect(() => {
     setTimeout(() => {
-      dispatch({ type: HIDE_MESSAGE })
-    }, 700)
-  }, [checkMessage]);
+      dispatch({ type: HIDE_CHECKMESSAGE });
+    }, 600)
+  }, [check]);
 
   const value = useMemo(() => (
-    { challenge: challenge, dispatch, initial, count, cellState }
-  ), [challenge, initial, count, cellState]);
+    { challenge: challenge, modal: modal, dispatch, initial, count, cellState, check }
+  ), [challenge, initial, count, cellState, check]);
 
 
   return (
@@ -150,12 +141,19 @@ const App = () => {
             count={count}
             cellState={cellState}
             />
-          <CheckMessage cellState={cellState}  visible={checkMessage}/>
+          <CheckMessage/>
 
-              {/* <ResultMessage visible={modal} count={count} dday={challenge.dday}/> */}
         </Template>
-        {reset && <ResetMessage onClickConfirm={onClickConfirm} onClickCancel={onClickCancel}/>}
-        {modal && <StartChallenge />}
+        <StartChallenge 
+          visible={modal.form}/>
+        <Report 
+          visible={modal.report} 
+            count={count} 
+            dispatch={dispatch}/>
+        <ResetMessage 
+          visible={modal.reset} 
+          dispatch={dispatch}
+          />
         <Reset onClickReset={onClickReset}/>
       </ChallengeContext.Provider>
   </>
