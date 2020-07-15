@@ -146,11 +146,12 @@ const Form = () => {
         dispatch({ type: TOGGLE_MODAL, form: false });
       }
    }, [goal, {...challenge}]);
-
+  
   useEffect(() => {
     const { goal, motivate, startDate, endDate } = challenge;
     if(!initial){
       setInputs({
+        ...goal,
         goal: goal,
         motivate: motivate,
       });
