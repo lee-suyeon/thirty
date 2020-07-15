@@ -1,5 +1,5 @@
-import React, { useState, useRef, useCallback, useEffect, useContext } from 'react';
-import styled, { ThemeProvider } from 'styled-components';
+import React, { useState, useRef, useCallback, useEffect, useContext, useMemo } from 'react';
+import styled from 'styled-components';
 import Button from './Button';
 import { START_CHALLENGE, ChallengeContext, TOGGLE_MODAL } from '../App';
 
@@ -9,11 +9,12 @@ const FormGroup = styled.form`
 
 const FormBlock = styled.div`
    label {
+      display: inline-block;
       color : #666;
       font-size: 1.6rem;
       margin: 2.5rem 0 1rem 0.3rem;
    }
-   label .message{
+   span.message{
       display: inline-block;
       font-size: 1rem;
       color: tomato;
@@ -21,12 +22,11 @@ const FormBlock = styled.div`
    }
    input, textarea {
       width: 100%;
-      padding: 1rem;
       border: 1px solid #d4e2d4;
       border-radius: 5px;
       outline: none;
+      padding: 1rem;
    }
-
    input {
       height: 60px;
       font-size: 1.5rem;
@@ -47,11 +47,13 @@ const FormBlock = styled.div`
       margin-top: 0.7rem;
       text-align: right;
    }
-   span {
+   span.end-date {
       font-weight: 500;
       color:  #447d53;
    }
 `
+
+
 const getToday = () => {
    let today = new Date();
    return convertDateString(today);
@@ -68,48 +70,43 @@ const convertDateString = (date) => {
 
 const getAfter30days = (date) => {
    let inputDate = new Date(date);
-   inputDate.setDate( inputDate.getDate() + 29 );
+   let sum30days = inputDate.getDate() + 29;
+   inputDate.setDate(sum30days);
    return convertDateString(inputDate);
 }
 
-const getDday = (date) => {
-   const startDay = new Date(date);
-   const after30Days = getAfter30days(getToday());
-   const endDay = new Date(after30Days);
-
-   const gap = startDay.getTime() - endDay.getTime();
-   const dDay = Math.floor(gap / (1000 * 60 * 60 * 24)) * -1;
-
-   return dDay + 1;
-}
-
-
-
-const Form = ( ) => {
-   const { challenge, dispatch, initial } = useContext(ChallengeContext);
-
-   const [goal, setGoal] = useState('');
+const Form = () => {
+   const { challenge, dispatch, initial, count } = useContext(ChallengeContext);
+   const [inputs, setInputs] = useState({
+      goal: '',
+      motivate: '',
+   });
+   //const selectStartDate = useMemo(() => getToday(), []);
+   const [dates, setDates] = useState({
+      startDate: getToday(),
+      endDate: getAfter30days(getToday()),
+   });
    const [message, setMessage] = useState('');
-   const [startDate, setStartDate] = useState(getToday());
-   const [endDate, setEndDate] = useState(getAfter30days(getToday()));
-   const [motivate, setMotivate] = useState('');
+   const { goal, motivate } = inputs;
+   const { startDate, endDate } = dates;
    const inputRef = useRef(null);
-   const dday = getDday(startDate);
    
-   const onChangeGoal = useCallback((e) => {
-      setGoal(e.target.value);
-   },[]);
+   const onChangeInput = useCallback((e) => {
+      setInputs({
+         ...inputs,
+         [e.target.name] : e.target.value,
+      });
+   },[inputs]);
 
    const onChangeDate = useCallback((e) => {
-      setStartDate(e.target.value);
-      setEndDate(getAfter30days(e.target.value));
-   },[]);
+      setDates({
+         ...dates,
+         startDate: e.target.value,
+         endDate: getAfter30days(e.target.value),
+      });
+   },[dates]);
 
-   const onChangeMotivate = useCallback((e) => {
-      setMotivate(e.target.value);
-   },[]);
-
-   const onSubmitForm = (e) => {
+   const onSubmitForm = useCallback((e) => {
       e.preventDefault(); 
       if(!goal){
          setMessage('목표를 입력해주세요');
@@ -121,56 +118,66 @@ const Form = ( ) => {
                goal: goal,
                startDate: startDate,
                endDate: endDate,
-               dday: dday,
                motivate: motivate
             }
          });
          dispatch({ type: TOGGLE_MODAL, form: false });
       }
-   }
+   }, [goal, {...challenge}]);
 
    useEffect(() => {
-      if(initial){
-         setGoal(challenge.goal);
-         setMotivate(challenge.motivate);
-         setStartDate(challenge.startDate);
+      const { goal, motivate, startDate, endDate } = challenge;
+      if(!initial){
+         setInputs({
+            goal: goal,
+            motivate: motivate,
+         });
+         setDates({
+            ...dates,
+            startDate: startDate,
+            endDate: endDate,
+         });
       }
-   }, [initial, challenge.goal, challenge.motivate, challenge.startDate])
+   }, [initial, challenge])
 
    return (
       <>
          <FormGroup onSubmit={onSubmitForm}>
             <FormBlock>
-               <label>MY GOAL<span className="message">{message}</span></label>
+               <label htmlFor="goal">MY GOAL</label>
+               <span className="message">{message}</span>
                <input
-                  value={goal}
-                  onChange={onChangeGoal}
+                  id="goal" 
                   name="goal" 
+                  value={goal}
                   placeholder="Study React"
                   autoComplete="off"
+                  onChange={onChangeInput}
                   ref={inputRef}
                />
             </FormBlock>
             <FormBlock>
-               <label>START DAY<span className="message">{initial && "날짜를 변경 할 수 없습니다"}</span></label>
+               <label htmlFor="startDate">START DAY</label>
+               <span className="message">{count !== 0 && "날짜를 변경 할 수 없습니다"}</span>
                <input 
                   type="date" 
-                  name="date"
+                  id="startDate"
+                  name="startDate"
                   value={startDate}
-                  onChange={onChangeDate}
                   min={getToday()}
-                  disabled={initial}
+                  disabled={count}
+                  onChange={onChangeDate}
                />
-               <p>도전 종료일은 <span>{endDate}</span> 입니다</p>
+               <p>도전 종료일은 <span className="end-date">{endDate}</span> 입니다</p>
             </FormBlock>
             <FormBlock>
-               <label>MOTIVATE YOURSELF</label>
+               <label htmlFor="motivate">MOTIVATE YOURSELF</label>
                <textarea 
                   name="motivate" 
                   placeholder="The truth is that everyone is bored, and devotes himself to cultivating habits."
                   value={motivate}
                   maxLength="47"
-                  onChange={onChangeMotivate}
+                  onChange={onChangeInput}
                ></textarea>
             </FormBlock>
             <Button title="START" type="subimt"/>
