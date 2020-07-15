@@ -81,10 +81,10 @@ const Form = () => {
       goal: '',
       motivate: '',
    });
-   //const selectStartDate = useMemo(() => getToday(), []);
+   const selectStartDate = useMemo(() => getToday(), []);
    const [dates, setDates] = useState({
-      startDate: getToday(),
-      endDate: getAfter30days(getToday()),
+      startDate: selectStartDate,
+      endDate: getAfter30days(selectStartDate),
    });
    const [message, setMessage] = useState('');
    const { goal, motivate } = inputs;
@@ -164,7 +164,7 @@ const Form = () => {
                   id="startDate"
                   name="startDate"
                   value={startDate}
-                  min={getToday()}
+                  min={selectStartDate}
                   disabled={count}
                   onChange={onChangeDate}
                />
