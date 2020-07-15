@@ -1,6 +1,6 @@
 # CodeReview
 
-<img src="https://github.com/lee-suyeon/30days/blob/master/img/start-challenge.gif?raw=true" alt="startchallenge">
+<img src="https://github.com/lee-suyeon/30days/blob/master/img/start-challenge.gif?raw=true" width="700" alt="startchallenge">
 
 <br />
 
@@ -14,7 +14,7 @@
 5. 입력이 끝나면 start 버튼을 눌러 도전을 시작합니다.    
 (goal을 입력하지 않았다면 시작할 수 없습니다. ) 
 6. 입력된 내용은 왼쪽 화면에 그대로 표시됩니다. 
-<img src="https://github.com/lee-suyeon/30days/blob/master/img/3.JPG?raw=true" alt="startchallenge">
+<img src="https://github.com/lee-suyeon/30days/blob/master/img/3.JPG?raw=true" width="700" alt="startchallenge">
 
 
 ---
