@@ -14,7 +14,7 @@ import { CheckCircleOutlineDimensions } from '@styled-icons/material/CheckCircle
 
 
 export const ChallengeContext = createContext({ // 초기값
-  initial : false,
+  initial : true,
   check: false,
   modal: {
     form: false,
@@ -27,14 +27,13 @@ export const ChallengeContext = createContext({ // 초기값
     goal: '',
     startDate: '',
     endDate: '',
-    dday: '',
     motivate: ''
   },
   dispatch: () => {},
 });
 
 const initialState = {
-  initial : false,
+  initial : true,
   check: false,
   modal: {
     form: false,
@@ -47,7 +46,6 @@ const initialState = {
     goal: '',
     startDate: '',
     endDate: '',
-    dday: '',
     motivate: ''
   },
 }
@@ -75,7 +73,7 @@ const reducer = (state, action) => {
       return {
         ...state,
         challenge : action.challenge,
-        initial: true,
+        initial: false,
       }
     case EDIT_CHALLENGE: 
     return {
@@ -137,7 +135,7 @@ const App = () => {
         <Template>
           <AddMessage />
           <ChallengeBoard 
-            visible={initial}
+            visible={!initial}
             count={count}
             cellState={cellState}
             />

@@ -34,7 +34,7 @@ const AddMessage = () => {
       dispatch({ type: TOGGLE_MODAL, form: true });
     }
 
-   if(initial) return null;
+   if(!initial) return null;
    return (
       <>
          <AddGroup>                  

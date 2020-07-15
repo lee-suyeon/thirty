@@ -47,7 +47,7 @@ const EditButton = styled(Edit)`
 
 const Note = memo(() => {
     const { challenge, dispatch } = useContext(ChallengeContext);
-    const { goal, startDate, endDate, dday, motivate } = challenge;
+    const { goal, startDate, endDate, motivate } = challenge;
 
 
     const onEditForm = useCallback(() => {
@@ -64,7 +64,6 @@ const Note = memo(() => {
             <Content>
                 <h2>Challenge period</h2>
                 <div className="challenge-cont">{startDate} - {endDate}</div>
-                <span className="d-day">도전 종료일까지 {dday}일 남았습니다</span>
             </Content>
             <Content>
                 <h2>Motivate</h2>
