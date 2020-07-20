@@ -56,6 +56,7 @@ export const EDIT_CHALLENGE = 'EDIT_CHALLENGE';
 export const CHECKED_CELL = 'CHECKED_CELL';
 export const CANCELED_CELL = 'CANCELED_CELL';
 export const HIDE_CHECKMESSAGE = 'HIDE_CHECKMESSAGE';
+export const SAVE_CHALLENGE = 'SAVE_CHALLENGE';
 export const RESET_CHALLENGE = 'RESET_CHALLENGE';
 
 const reducer = (state, action) => {
@@ -99,6 +100,12 @@ const reducer = (state, action) => {
         ...state,
         check: false,
       }
+    case SAVE_CHALLENGE: 
+      return {
+        ...state,
+        initial: action.initial,
+        challenge: action.challenge
+      }
     case RESET_CHALLENGE: 
       return initialState;
     default :
@@ -107,15 +114,16 @@ const reducer = (state, action) => {
 }
 
 
-
 const App = () => {
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [state, dispatch] = useReducer(reducer, initialState, () => {
+    const challengeData = localStorage.getItem('state');
+    return challengeData ? JSON.parse(challengeData) : [];
+  });
   const { modal, initial, count, challenge, cellState, check } = state;
 
   const onClickReset = useCallback(() => {
     dispatch({ type: TOGGLE_MODAL, reset: true });
   }, []);
-
 
   useEffect(() => {
     setTimeout(() => {
@@ -123,10 +131,14 @@ const App = () => {
     }, 600)
   }, [check]);
 
+  useEffect(() => {
+    localStorage.setItem('state', JSON.stringify(state));
+  }, [state]);
+
+
   const value = useMemo(() => (
     { challenge: challenge, modal: modal, dispatch, initial, count, cellState, check }
   ), [challenge, initial, count, cellState, check]);
-
 
   return (
   <>
