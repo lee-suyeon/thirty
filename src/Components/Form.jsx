@@ -78,8 +78,8 @@ const getAfter30days = (date) => {
 const Form = () => {
    const { challenge, dispatch, initial, count } = useContext(ChallengeContext);
    const [inputs, setInputs] = useState({
-      goal: '',
-      motivate: '',
+      goal: challenge.goal,
+      motivate: challenge.motivate,
    });
    const selectStartDate = useMemo(() => getToday(), []);
    const [dates, setDates] = useState({
@@ -96,6 +96,7 @@ const Form = () => {
          ...inputs,
          [e.target.name] : e.target.value,
       });
+
    },[inputs]);
 
    const onChangeDate = useCallback((e) => {
@@ -119,26 +120,21 @@ const Form = () => {
                startDate: startDate,
                endDate: endDate,
                motivate: motivate
-            }
+            },
          });
          dispatch({ type: TOGGLE_MODAL, form: false });
       }
-   }, [goal, {...challenge}]);
+   }, [goal, {...challenge}, initial]);
 
    useEffect(() => {
-      const { goal, motivate, startDate, endDate } = challenge;
+      const { startDate, endDate } = challenge;
       if(!initial){
-         setInputs({
-            goal: goal,
-            motivate: motivate,
-         });
          setDates({
-            ...dates,
             startDate: startDate,
             endDate: endDate,
          });
       }
-   }, [initial, challenge])
+   }, [initial]);
 
    return (
       <>
