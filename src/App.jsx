@@ -12,7 +12,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import { FlashAuto } from '@styled-icons/material';
 import { CheckCircleOutlineDimensions } from '@styled-icons/material/CheckCircleOutline';
 
-
 export const ChallengeContext = createContext({ // 초기값
   initial : true,
   check: false,
@@ -113,7 +112,6 @@ const reducer = (state, action) => {
   }
 }
 
-
 const App = () => {
   const [state, dispatch] = useReducer(reducer, initialState, () => {
     const challengeData = localStorage.getItem('state');
@@ -135,7 +133,6 @@ const App = () => {
     localStorage.setItem('state', JSON.stringify(state));
   }, [state]);
 
-
   const value = useMemo(() => (
     { challenge: challenge, modal: modal, dispatch, initial, count, cellState, check }
   ), [challenge, initial, count, cellState, check]);
@@ -153,12 +150,11 @@ const App = () => {
             />
           <CheckMessage/>
         </Template>
-        <StartChallenge 
-          visible={modal.form}/>
+        <StartChallenge visible={modal.form}/>
         <Report 
           visible={modal.report} 
-            count={count} 
-            dispatch={dispatch}/>
+          count={count} 
+          dispatch={dispatch}/>
         <ResetMessage 
           visible={modal.reset} 
           dispatch={dispatch}
@@ -166,6 +162,6 @@ const App = () => {
         <Reset onClickReset={onClickReset}/>
       </ChallengeContext.Provider>
   </>
-  )
+  );
 }
 export default App;
