@@ -1,8 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import { TOGGLE_MODAL, ChallengeContext  } from '../App';
-import Button from './Button';
-import Modal from './Modal';
+import { TOGGLE_MODAL, ChallengeContext  } from '../../App';
+import Button from '../commons/Button';
+import Modal from '../commons/Modal';
 
 const ResultCircle = styled.div`
 position: relative;

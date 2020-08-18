@@ -1,7 +1,7 @@
 import React, { useContext, useCallback } from 'react';
 import styled, { ThemeProvider, css } from 'styled-components';
 import { Close } from '@styled-icons/material/Close';
-import { ChallengeContext, TOGGLE_MODAL } from '../App';
+import { ChallengeContext, TOGGLE_MODAL } from '../../App';
 
 const sizeStyles = css`
   ${props =>

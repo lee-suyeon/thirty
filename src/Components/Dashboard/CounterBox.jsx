@@ -1,6 +1,6 @@
 import React, { memo, useContext } from 'react';
 import styled from 'styled-components';
-import { TOGGLE_MODAL, ChallengeContext } from '../App';
+import { TOGGLE_MODAL, ChallengeContext } from '../../App';
 import { InsertChartOutlined } from '@styled-icons/material/InsertChartOutlined';
 
 const CurrentWrap = styled.div`

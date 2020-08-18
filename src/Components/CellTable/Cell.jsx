@@ -1,6 +1,6 @@
 import React, { memo, useState, useCallback, useContext, useEffect, useRef } from 'react';
 import styled, { css } from 'styled-components';
-import { ChallengeContext, CHECKED_CELL, CANCELED_CELL } from '../App';
+import { ChallengeContext, CHECKED_CELL, CANCELED_CELL } from '../../App';
 
 const colorStyles = css`
   ${props =>

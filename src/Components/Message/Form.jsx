@@ -1,7 +1,7 @@
 import React, { useState, useRef, useCallback, useEffect, useContext, useMemo } from 'react';
 import styled from 'styled-components';
-import Button from './Button';
-import { START_CHALLENGE, ChallengeContext, TOGGLE_MODAL } from '../App';
+import Button from '../commons/Button';
+import { START_CHALLENGE, ChallengeContext, TOGGLE_MODAL } from '../../App';
 
 const FormGroup = styled.form`
   width: 100%;

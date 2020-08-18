@@ -1,6 +1,6 @@
 import React, { useContext, memo, useCallback } from 'react';
 import styled, { ThemeProvider } from 'styled-components';
-import { ChallengeContext, TOGGLE_MODAL } from '../App';
+import { ChallengeContext, TOGGLE_MODAL } from '../../App';
 import { Edit } from '@styled-icons/material/Edit';
 
 

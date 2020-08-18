@@ -1,8 +1,8 @@
 import React, { useContext } from 'react';
 import styled from 'styled-components';
-import theme from '../Style/Theme';
+import theme from '../../Style/Theme';
 import { AddCircleOutline } from '@styled-icons/material';
-import { ChallengeContext, TOGGLE_MODAL } from '../App';
+import { ChallengeContext, TOGGLE_MODAL } from '../../App';
 
 const AddGroup = styled.div`
   position: absolute;

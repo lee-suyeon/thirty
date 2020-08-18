@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
 import styled, { ThemeProvider, keyframes } from 'styled-components';
-import { TOGGLE_MODAL, RESET_CHALLENGE } from '../App';
-import Button from './Button';
-import Modal from './Modal';
+import { TOGGLE_MODAL, RESET_CHALLENGE } from '../../App';
+import Button from '../commons/Button';
+import Modal from '../commons/Modal';
 
 const ButtonGroup = styled.div`
   width: 100%;

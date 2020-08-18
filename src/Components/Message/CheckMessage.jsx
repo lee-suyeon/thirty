@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import styled, { keyframes, css  } from 'styled-components';
 import { CheckCircle } from '@styled-icons/material/CheckCircle';
-import { ChallengeContext } from '../App';
+import { ChallengeContext } from '../../App';
 
 const showUp = keyframes`
   from { 
