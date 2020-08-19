@@ -1,47 +1,53 @@
 import React from 'react';
 import styled, { css } from 'styled-components';
 
-const sizeStyles = css`
+const typeStyle = css`
   ${props =>
-    props.size === 'small' &&
+    props.type === 'primary' &&
     css`
-      width: 49%;
-      height: 55px;
-      font-size: 1.5rem;
-    `}
-  ${props =>
-    props.size === 'medium' &&
-    css`
-      width: 49%;
-      height: 55px;
-      font-size: 1.4rem;
+      background-color: #4d55ff;
+      color: #fff;
+
+      &:hover {
+        background-color: #646bff;
+      }
     `}
 `;
-const SubmitButton = styled.button`
-  width: ${props => props.width || '100%'};
-  height: 60px;
-  background-color: #447d53;
-  border-radius: 5px;
+
+const StyledButton = styled.button`
+  border-radius: 3px;
+  border: 1px solid #4d55ff;
   cursor: pointer;
   margin-top: 1.5rem;
-  color: #fff;
-  font-size: 1.8rem;
+  color: #4d55ff;
+  font-size: 0.825rem;
   font-weight: 500;
-  letter-spacing: 2px;
+  padding: 0.45rem 1.2rem;
+  transition: 0.2s;
+
+  &:hover {
+    background-color: #4d55ff;
+    color: #fff;
+  }
 
   & + & {
     margin-left: 2%;
   }
-  
-  ${sizeStyles}
+
+  ${typeStyle}
 `;
 
 const Button = ({ title, width, size, ...rest }) => {
   return (
     <>
-      <SubmitButton {...rest} width={width} size={size}>{title}</SubmitButton>
+      <StyledButton {...rest} width={width} size={size}>{title}</StyledButton>
     </>
   );
 }
+
+Button.defaultProps = {
+  color: 'blue'
+};
+
 
 export default Button;

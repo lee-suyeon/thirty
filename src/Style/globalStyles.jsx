@@ -8,8 +8,8 @@ const GlobalStyle = createGlobalStyle`
 
       }
       body{
-        background-color: #e8f1e9;
-        font-family: 'Montserrat', sans-serif;
+        background-color: #f7f8fa;
+        font-family: 'Montserrat', 'Noto-sans', sans-serif;
         font-size: 1.2rem;
         font-weight: 400;
         color: #333;
@@ -30,6 +30,7 @@ const GlobalStyle = createGlobalStyle`
       }
       button {
         border: none;
+        background-color: transparent;
       }
 
 `
