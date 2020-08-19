@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 import Button from '../commons/Button';
 
@@ -29,13 +30,13 @@ const Board = styled.div`
 function GoalBoard() {
   return (
     <Board>
-      <h3>도전</h3>
+      <h3>Challenge</h3>
       <div>
         <em style={{ fontSize: "3rem"}}>🙅🏻</em>
         <p>아직 진행중인 도전이 없습니다.</p>
-        <Button 
-          title="도전 시작"
-          />
+        <Link to='challenge'>
+          <Button title="도전 시작" />
+        </Link>
       </div>
     </Board>
   )

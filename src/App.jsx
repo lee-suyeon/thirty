@@ -1,6 +1,9 @@
 import React, { useEffect, useCallback, useMemo } from 'react';
 import GlobalStyle from './Style/globalStyles';
-import MainPage from './Components/Template/MainPage';
+import { Route } from 'react-router-dom';
+import MainPage from './Components/MainPage/MainPage';
+import ChallengePage from './Components/ChallengePage/ChallengePage';
+import Modal from './Components/commons/Modal';
 // import AddMessage from './Components/Message/AddMessage';
 // import Reset from './Components/commons/Reset';
 // import ResetMessage from './Components/Message/ResetMessage';
@@ -95,8 +98,9 @@ const App = () => {
   return (
   <>
     <GlobalStyle />
-      
-      <MainPage />
+    <Route exact path="/30days" component={MainPage} />
+    <Route exact path="/challenge" component={ChallengePage} />
+    <Modal />
         {/* <Template>
       <StartChallenge visible={modal}/>
           <AddMessage />

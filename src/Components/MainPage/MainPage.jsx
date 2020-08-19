@@ -3,7 +3,6 @@ import styled, { ThemeProvider } from 'styled-components';
 import theme from '../../Style/Theme';
 import Header from './Header';
 import GoalBoard from '../Dashboard/GoalBoard';
-
 const Container = styled.div`
   width: 1200px;
   margin: 4rem auto;
